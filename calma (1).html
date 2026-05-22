@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CALMA · Terapia & Bienestar</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F2EB;
+    --cream-dark: #EDE5D8;
+    --terracota: #C4785A;
+    --terracota-light: #D4967C;
+    --terracota-dark: #A85E42;
+    --sage: #8A9E85;
+    --sage-light: #B4C4B0;
+    --stone: #9E9087;
+    --stone-light: #C8BFB5;
+    --text-dark: #3D3530;
+    --text-mid: #6B5F58;
+    --text-light: #9E9087;
+    --white: #FDFAF6;
+    --border: #DDD5C8;
+    --shadow: rgba(61,53,48,0.08);
+    --success: #7A9E7E;
+    --warning: #D4A85C;
+    --danger: #C46A6A;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    font-weight: 300;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed; top:0; left:0; width:220px; height:100vh;
+    background: var(--text-dark);
+    display: flex; flex-direction:column;
+    z-index: 100;
+    transition: transform .3s ease;
+  }
+
+  .sidebar-logo {
+    padding: 32px 24px 24px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .sidebar-logo .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight:300; letter-spacing: 6px;
+    color: var(--cream);
+  }
+  .sidebar-logo .logo-sub {
+    font-size: 10px; letter-spacing: 2.5px; color: var(--terracota-light);
+    text-transform: uppercase; margin-top: 2px;
+  }
+
+  .sidebar-nav { flex:1; padding: 20px 0; }
+  .nav-item {
+    display:flex; align-items:center; gap:12px;
+    padding: 13px 24px; cursor:pointer;
+    color: var(--stone-light); font-size:13px; letter-spacing:.5px;
+    transition: all .2s; border-left: 2px solid transparent;
+  }
+  .nav-item:hover { color: var(--cream); background: rgba(255,255,255,.04); }
+  .nav-item.active { color: var(--terracota-light); border-left-color: var(--terracota); background: rgba(196,120,90,.08); }
+  .nav-item svg { width:16px; height:16px; flex-shrink:0; }
+
+  .sidebar-footer { padding:20px 24px; border-top: 1px solid rgba(255,255,255,.06); }
+  .sidebar-footer .version { font-size:10px; color:var(--stone); letter-spacing:1px; }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: 220px;
+    min-height: 100vh;
+    display: flex; flex-direction:column;
+  }
+
+  /* ── TOPBAR ── */
+  #topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 36px;
+    height: 64px;
+    display:flex; align-items:center; justify-content:space-between;
+    position: sticky; top:0; z-index:50;
+  }
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight:400;
+    color: var(--text-dark);
+  }
+  .topbar-actions { display:flex; gap:10px; align-items:center; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display:inline-flex; align-items:center; gap:7px;
+    padding: 9px 18px; border-radius: 6px;
+    font-family:'Jost',sans-serif; font-size:13px; font-weight:400;
+    cursor:pointer; border:none; transition: all .2s; letter-spacing:.3px;
+    white-space: nowrap;
+  }
+  .btn-primary { background:var(--terracota); color:var(--white); }
+  .btn-primary:hover { background:var(--terracota-dark); }
+  .btn-outline { background:transparent; color:var(--terracota); border:1px solid var(--terracota); }
+  .btn-outline:hover { background:var(--terracota); color:var(--white); }
+  .btn-ghost { background:transparent; color:var(--text-mid); border:1px solid var(--border); }
+  .btn-ghost:hover { background:var(--cream-dark); }
+  .btn-sm { padding:6px 12px; font-size:12px; }
+  .btn-icon { padding:8px; border-radius:6px; background:transparent; border:1px solid var(--border); color:var(--text-mid); cursor:pointer; display:inline-flex; align-items:center; transition:all .2s; }
+  .btn-icon:hover { background:var(--cream-dark); }
+  .btn-danger { background:var(--danger); color:white; }
+  .btn-danger:hover { background: #a85555; }
+  .btn-success { background:var(--success); color:white; }
+  .btn-success:hover { background: #5f8a63; }
+
+  /* ── CONTENT AREA ── */
+  #content { flex:1; padding: 32px 36px; }
+
+  /* ── VIEWS ── */
+  .view { display:none; }
+  .view.active { display:block; }
+
+  /* ── DASHBOARD ── */
+  .stats-grid {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background:var(--white); border-radius:10px;
+    padding:20px 24px; border: 1px solid var(--border);
+    transition: box-shadow .2s;
+  }
+  .stat-card:hover { box-shadow: 0 4px 20px var(--shadow); }
+  .stat-label { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-light); }
+  .stat-value { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:300; color:var(--text-dark); margin-top:4px; }
+  .stat-sub { font-size:12px; color:var(--text-light); margin-top:2px; }
+  .stat-accent { width:3px; height:36px; background:var(--terracota); border-radius:2px; position:absolute; left:0; top:50%; transform:translateY(-50%); }
+
+  .section-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:19px; font-weight:400; color:var(--text-dark);
+    margin-bottom:16px; letter-spacing:.3px;
+  }
+
+  /* ── TABLE ── */
+  .table-container {
+    background:var(--white); border-radius:10px;
+    border:1px solid var(--border); overflow:hidden;
+  }
+  .table-header {
+    padding:16px 24px;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .search-box {
+    display:flex; align-items:center; gap:8px;
+    background:var(--cream); border:1px solid var(--border);
+    border-radius:6px; padding:8px 12px;
+  }
+  .search-box input {
+    border:none; background:transparent; font-family:'Jost',sans-serif;
+    font-size:13px; color:var(--text-dark); outline:none; width:200px;
+  }
+  .search-box input::placeholder { color:var(--stone-light); }
+
+  table { width:100%; border-collapse:collapse; }
+  thead th {
+    text-align:left; padding:10px 24px;
+    font-size:10px; font-weight:500; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--text-light);
+    background:var(--cream); border-bottom:1px solid var(--border);
+  }
+  tbody tr { border-bottom:1px solid var(--cream-dark); transition:background .15s; cursor:pointer; }
+  tbody tr:last-child { border-bottom:none; }
+  tbody tr:hover { background:var(--cream); }
+  tbody td { padding:14px 24px; font-size:13px; color:var(--text-mid); }
+  .td-name { font-weight:500; color:var(--text-dark); }
+
+  /* ── BADGES ── */
+  .badge {
+    display:inline-block; padding:3px 10px; border-radius:20px;
+    font-size:11px; font-weight:500; letter-spacing:.3px;
+  }
+  .badge-green { background:rgba(122,158,126,.15); color:var(--success); }
+  .badge-orange { background:rgba(212,168,92,.15); color:var(--warning); }
+  .badge-red { background:rgba(196,106,106,.15); color:var(--danger); }
+  .badge-stone { background:var(--cream-dark); color:var(--stone); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(61,53,48,.5);
+    backdrop-filter:blur(4px);
+    display:none; align-items:center; justify-content:center;
+    z-index:1000; padding:20px;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:var(--white); border-radius:14px;
+    width:100%; max-width:720px; max-height:90vh;
+    overflow-y:auto; box-shadow:0 20px 60px rgba(61,53,48,.2);
+    animation: modalIn .25s ease;
+  }
+  .modal-lg { max-width:920px; }
+  @keyframes modalIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .modal-header {
+    padding:24px 28px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:flex-start; justify-content:space-between;
+    position:sticky; top:0; background:var(--white); z-index:10; border-radius:14px 14px 0 0;
+  }
+  .modal-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; }
+  .modal-subtitle { font-size:12px; color:var(--text-light); margin-top:2px; letter-spacing:.3px; }
+  .modal-close { background:none; border:none; cursor:pointer; color:var(--stone); padding:4px; border-radius:4px; transition:color .2s; }
+  .modal-close:hover { color:var(--text-dark); }
+  .modal-body { padding:24px 28px; }
+  .modal-footer { padding:16px 28px 24px; border-top:1px solid var(--border); display:flex; gap:10px; justify-content:flex-end; }
+
+  /* ── TABS ── */
+  .tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:24px; }
+  .tab {
+    padding:10px 20px; font-size:12px; letter-spacing:1px; text-transform:uppercase;
+    cursor:pointer; color:var(--text-light); border-bottom:2px solid transparent;
+    transition:all .2s; font-weight:500; margin-bottom:-1px;
+  }
+  .tab.active { color:var(--terracota); border-bottom-color:var(--terracota); }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* ── FORMS ── */
+  .form-grid { display:grid; gap:16px; }
+  .form-grid-2 { grid-template-columns:1fr 1fr; }
+  .form-grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .form-group { display:flex; flex-direction:column; gap:5px; }
+  .form-group label { font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-light); font-weight:500; }
+  .form-control {
+    background:var(--cream); border:1px solid var(--border);
+    border-radius:6px; padding:10px 14px;
+    font-family:'Jost',sans-serif; font-size:13px; color:var(--text-dark);
+    transition:border-color .2s; outline:none;
+  }
+  .form-control:focus { border-color:var(--terracota); background:var(--white); }
+  .form-control::placeholder { color:var(--stone-light); }
+  textarea.form-control { resize:vertical; min-height:80px; }
+  select.form-control { cursor:pointer; }
+
+  .form-section { margin-bottom:24px; }
+  .form-section-title {
+    font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:500;
+    color:var(--terracota); margin-bottom:12px; padding-bottom:6px;
+    border-bottom:1px solid var(--cream-dark); letter-spacing:.3px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .form-section-title::after { content:''; flex:1; height:1px; background:var(--cream-dark); }
+
+  /* ── FICHA CLIENTE ── */
+  .client-header {
+    background: linear-gradient(135deg, var(--text-dark) 0%, #5a4940 100%);
+    border-radius:12px; padding:24px 28px; margin-bottom:24px;
+    display:flex; align-items:center; gap:20px; color:var(--cream);
+    position:relative; overflow:hidden;
+  }
+  .client-header::before {
+    content:''; position:absolute; right:-20px; top:-30px;
+    width:180px; height:180px; border-radius:50%;
+    background:rgba(196,120,90,.12);
+  }
+  .client-avatar {
+    width:56px; height:56px; border-radius:50%;
+    background:var(--terracota); display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond',serif; font-size:22px; color:white; flex-shrink:0;
+  }
+  .client-info h2 { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:400; }
+  .client-info p { font-size:12px; color:var(--stone-light); margin-top:3px; letter-spacing:.3px; }
+  .client-stats { margin-left:auto; display:flex; gap:24px; text-align:center; }
+  .client-stat-val { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; }
+  .client-stat-lbl { font-size:10px; letter-spacing:1.5px; color:var(--stone-light); }
+
+  /* ── SESIONES ── */
+  .session-card {
+    background:var(--white); border:1px solid var(--border);
+    border-radius:10px; padding:18px 20px; margin-bottom:12px;
+    transition: box-shadow .2s;
+  }
+  .session-card:hover { box-shadow:0 4px 16px var(--shadow); }
+  .session-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:8px; }
+  .session-date { font-size:12px; color:var(--text-light); letter-spacing:.3px; }
+  .session-type { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:500; color:var(--text-dark); }
+  .session-notes { font-size:12px; color:var(--text-mid); margin-top:6px; line-height:1.6; }
+  .session-footer { display:flex; align-items:center; justify-content:space-between; margin-top:12px; }
+  .session-price { font-size:16px; font-weight:500; color:var(--terracota); }
+  .session-price.descuento { color:var(--sage); }
+
+  /* ── SETTINGS ── */
+  .settings-card {
+    background:var(--white); border:1px solid var(--border);
+    border-radius:10px; padding:24px; margin-bottom:16px;
+  }
+  .settings-card h3 { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:400; margin-bottom:16px; }
+
+  .session-type-item {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px; background:var(--cream); border-radius:8px;
+    margin-bottom:8px;
+  }
+  .session-type-name { font-weight:500; font-size:14px; }
+  .session-type-price { color:var(--terracota); font-weight:500; }
+
+  /* ── TOGGLE ── */
+  .toggle-wrapper { display:flex; align-items:center; gap:8px; }
+  .toggle { position:relative; width:40px; height:22px; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .toggle-slider {
+    position:absolute; inset:0; background:var(--border);
+    border-radius:22px; cursor:pointer; transition:.2s;
+  }
+  .toggle-slider::before {
+    content:''; position:absolute; width:16px; height:16px;
+    left:3px; bottom:3px; background:white;
+    border-radius:50%; transition:.2s;
+  }
+  .toggle input:checked + .toggle-slider { background:var(--terracota); }
+  .toggle input:checked + .toggle-slider::before { transform:translateX(18px); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align:center; padding:48px 24px;
+    color:var(--text-light);
+  }
+  .empty-state svg { opacity:.3; margin-bottom:12px; }
+  .empty-state p { font-size:14px; }
+
+  /* ── LOADER / TOAST ── */
+  #toast {
+    position:fixed; bottom:24px; right:24px;
+    background:var(--text-dark); color:var(--cream);
+    padding:12px 20px; border-radius:8px;
+    font-size:13px; letter-spacing:.3px;
+    opacity:0; transform:translateY(8px);
+    transition:all .3s; pointer-events:none; z-index:9999;
+  }
+  #toast.show { opacity:1; transform:translateY(0); }
+
+  /* ── SUPABASE SETUP ── */
+  #supabase-setup {
+    position:fixed; inset:0; background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    z-index:9999; padding:20px;
+  }
+  .setup-card {
+    background:var(--white); border-radius:16px;
+    padding:40px; max-width:480px; width:100%;
+    border:1px solid var(--border);
+    box-shadow:0 20px 60px rgba(61,53,48,.12);
+    text-align:center;
+  }
+  .setup-logo {
+    font-family:'Cormorant Garamond',serif;
+    font-size:42px; font-weight:300; letter-spacing:8px;
+    color:var(--terracota); margin-bottom:4px;
+  }
+  .setup-tagline { font-size:11px; letter-spacing:2px; color:var(--stone); margin-bottom:28px; }
+  .setup-card h2 { font-family:'Cormorant Garamond',serif; font-size:20px; margin-bottom:8px; }
+  .setup-card p { font-size:13px; color:var(--text-mid); margin-bottom:24px; line-height:1.7; }
+  .setup-hint {
+    background:var(--cream); border-radius:8px; padding:12px 16px;
+    font-size:11px; color:var(--text-mid); text-align:left; margin-bottom:20px;
+    border:1px solid var(--border);
+  }
+  .setup-hint code { font-family:monospace; color:var(--terracota); font-size:10px; word-break:break-all; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    #sidebar { transform:translateX(-220px); }
+    #main { margin-left:0; }
+    .stats-grid { grid-template-columns:repeat(2,1fr); }
+    .form-grid-2, .form-grid-3 { grid-template-columns:1fr; }
+    .client-stats { display:none; }
+  }
+
+  /* ── MISC ── */
+  .divider { border:none; border-top:1px solid var(--border); margin:20px 0; }
+  .text-muted { color:var(--text-light); font-size:12px; }
+  .flex { display:flex; }
+  .items-center { align-items:center; }
+  .gap-2 { gap:8px; }
+  .gap-3 { gap:12px; }
+  .mt-1 { margin-top:4px; }
+  .ml-auto { margin-left:auto; }
+  .fw-500 { font-weight:500; }
+
+  .no-data-row td { text-align:center; padding:40px; color:var(--text-light); font-style:italic; }
+
+  /* filter tabs */
+  .filter-tabs { display:flex; gap:6px; flex-wrap:wrap; }
+  .filter-tab {
+    padding:5px 14px; border-radius:20px; font-size:12px; cursor:pointer;
+    border:1px solid var(--border); color:var(--text-mid); transition:all .2s;
+  }
+  .filter-tab.active { background:var(--terracota); color:white; border-color:var(--terracota); }
+
+  /* inline edit */
+  .editable { cursor:text; border-bottom:1px dashed transparent; transition:border-color .2s; }
+  .editable:hover { border-bottom-color:var(--terracota); }
+
+  /* próximos turnos */
+  .turno-item {
+    display:flex; align-items:center; gap:14px;
+    padding:12px 16px; border-radius:8px; background:var(--cream);
+    margin-bottom:8px; border:1px solid var(--cream-dark);
+  }
+  .turno-date-box {
+    background:var(--terracota); color:white;
+    border-radius:8px; padding:6px 10px;
+    text-align:center; min-width:48px;
+  }
+  .turno-date-box .day { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; line-height:1; }
+  .turno-date-box .month { font-size:9px; letter-spacing:1px; text-transform:uppercase; }
+
+  .chip {
+    display:inline-flex; align-items:center; gap:4px;
+    background:var(--cream-dark); color:var(--text-mid);
+    border-radius:20px; padding:3px 10px; font-size:11px;
+  }
+
+  /* scroll suave */
+  .modal { scroll-behavior:smooth; }
+
+  input[type=number] { -moz-appearance:textfield; }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+
+/* ═══ DARK MODE ═══ */
+[data-theme="dark"] {
+  --cream:#1E1A17; --cream-dark:#252018; --cream-hover:#2C2720;
+  --white:#2A2420; --border:#3D3530; --shadow:rgba(0,0,0,.3);
+  --text-dark:#EDE5D8; --text-mid:#C8BFB5; --text-light:#8A7D74;
+  --bg:#1A1613; --surface:#231F1C;
+  --terracota-bg:rgba(196,120,90,.15);
+  --sage-bg:rgba(138,158,133,.1);
+}
+
+/* ═══ DARK MODE SIDEBAR ═══ */
+[data-theme="dark"] #sidebar { background: #131110; }
+[data-theme="dark"] .sidebar-logo .logo-text { color: #EDE5D8; }
+[data-theme="dark"] .nav-item { color: #8A7D74; }
+[data-theme="dark"] .nav-item:hover { color: #EDE5D8; }
+[data-theme="dark"] .nav-item.active { color: var(--terracota-light); }
+
+/* ═══ DARK MODE MAIN ═══ */
+[data-theme="dark"] body { background: #1A1613; color: #EDE5D8; }
+[data-theme="dark"] #topbar { background: #231F1C; border-color: #3D3530; }
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .table-container,
+[data-theme="dark"] .settings-card,
+[data-theme="dark"] .session-card { background: #231F1C; border-color: #3D3530; }
+[data-theme="dark"] .form-control { background: #1A1613; border-color: #3D3530; color: #EDE5D8; }
+[data-theme="dark"] .form-control:focus { background: #231F1C; }
+[data-theme="dark"] .modal { background: #231F1C; }
+[data-theme="dark"] .modal-header { background: #231F1C; border-color: #3D3530; }
+[data-theme="dark"] .modal-footer { border-color: #3D3530; }
+[data-theme="dark"] .tabs { border-color: #3D3530; }
+[data-theme="dark"] thead th { background: #1A1613; }
+[data-theme="dark"] tbody tr { border-color: #3D3530; }
+[data-theme="dark"] tbody tr:hover { background: #1A1613; }
+[data-theme="dark"] .session-type-item,
+[data-theme="dark"] .turno-item { background: #1A1613; border-color: #3D3530; }
+[data-theme="dark"] .search-box { background: #1A1613; border-color: #3D3530; }
+[data-theme="dark"] .search-box input { color: #EDE5D8; }
+[data-theme="dark"] .btn-ghost { border-color: #3D3530; color: #C8BFB5; }
+[data-theme="dark"] .btn-ghost:hover { background: #2C2720; }
+[data-theme="dark"] .btn-icon { border-color: #3D3530; color: #8A7D74; }
+[data-theme="dark"] .btn-icon:hover { background: #2C2720; }
+[data-theme="dark"] .filter-tab { background: #231F1C; border-color: #3D3530; color: #8A7D74; }
+[data-theme="dark"] .badge-stone { background: #3D3530; color: #8A7D74; }
+[data-theme="dark"] .chip { background: #3D3530; color: #8A7D74; }
+[data-theme="dark"] .setup-card { background: #231F1C; border-color: #3D3530; }
+[data-theme="dark"] .setup-hint { background: #1A1613; border-color: #3D3530; }
+[data-theme="dark"] .divider { border-color: #3D3530; }
+[data-theme="dark"] .fsec-title { border-color: #3D3530; }
+[data-theme="dark"] .stat-value { color: #EDE5D8; }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     SUPABASE SETUP SCREEN
+═══════════════════════════════════════════════ -->
+<div id="supabase-setup">
+  <div class="setup-card">
+    <div class="setup-logo">CALMA</div>
+    <div class="setup-tagline">TERAPIA · BIENESTAR · HOLÍSTICA</div>
+    <h2>Configuración inicial</h2>
+    <p>Para comenzar, ingresá las credenciales de tu proyecto Supabase. Estos datos se guardan solo en tu navegador.</p>
+    <div class="setup-hint">
+      <strong>¿Cómo obtenerlos?</strong><br><br>
+      Entrá a <code>supabase.com</code> → tu proyecto → Settings → API<br>
+      Copiá la <code>Project URL</code> y la <code>anon public key</code>
+    </div>
+    <div class="form-group" style="text-align:left;margin-bottom:14px">
+      <label>Project URL</label>
+      <input id="setup-url" class="form-control" placeholder="https://xxxx.supabase.co" type="url">
+    </div>
+    <div class="form-group" style="text-align:left;margin-bottom:20px">
+      <label>API Key (anon public)</label>
+      <input id="setup-key" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." type="text">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="saveSupabaseConfig()">
+      Conectar y continuar →
+    </button>
+    <p style="margin-top:14px;font-size:11px;color:var(--stone)">
+      También podés continuar en modo demo (datos en memoria, no se guardan)
+    </p>
+    <button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="useDemoMode()">Usar modo demo</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">CALMA</div>
+    <div class="logo-sub">Terapia Holística</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-item active" onclick="showView('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Inicio
+    </div>
+    <div class="nav-item" onclick="showView('clientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Clientes
+    </div>
+    <div class="nav-item" onclick="showView('turnos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Turnos
+    </div>
+    <div class="nav-item" onclick="showView('sesiones')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Sesiones
+    </div>
+    <div class="nav-item" onclick="showView('config')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Configuración
+    </div>
+  </div>
+  <div class="sidebar-footer" style="display:flex;align-items:center;gap:8px">
+    <div class="version" style="font-size:10px;color:rgba(255,255,255,.2);letter-spacing:.8px;flex:1">CALMA v2.0</div>
+    <button id="theme-btn" onclick="toggleTheme()" style="background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);cursor:pointer;padding:4px 9px;border-radius:5px;font-size:12px;transition:all .2s">☽</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN
+═══════════════════════════════════════════════ -->
+<div id="main">
+  <div id="topbar">
+    <div class="page-title" id="page-title">Inicio</div>
+    <div class="topbar-actions" id="topbar-actions">
+      <div id="db-status" style="font-size:11px;letter-spacing:.5px;color:var(--text-light);display:flex;align-items:center;gap:6px">
+        <span id="db-dot" style="width:7px;height:7px;border-radius:50%;background:var(--stone-light);display:inline-block"></span>
+        <span id="db-label">Sin conexión</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <!-- ─── DASHBOARD ─── -->
+    <div class="view active" id="view-dashboard">
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card" style="position:relative;overflow:hidden">
+          <div class="stat-accent"></div>
+          <div style="padding-left:10px">
+            <div class="stat-label">Clientes activos</div>
+            <div class="stat-value" id="stat-clientes">0</div>
+            <div class="stat-sub">total en sistema</div>
+          </div>
+        </div>
+        <div class="stat-card" style="position:relative;overflow:hidden">
+          <div class="stat-accent" style="background:var(--sage)"></div>
+          <div style="padding-left:10px">
+            <div class="stat-label">Sesiones este mes</div>
+            <div class="stat-value" id="stat-sesiones">0</div>
+            <div class="stat-sub">sesiones realizadas</div>
+          </div>
+        </div>
+        <div class="stat-card" style="position:relative;overflow:hidden">
+          <div class="stat-accent" style="background:var(--warning)"></div>
+          <div style="padding-left:10px">
+            <div class="stat-label">Ingresos mes</div>
+            <div class="stat-value" id="stat-ingresos">$0</div>
+            <div class="stat-sub">sesiones cobradas</div>
+          </div>
+        </div>
+        <div class="stat-card" style="position:relative;overflow:hidden">
+          <div class="stat-accent" style="background:var(--danger)"></div>
+          <div style="padding-left:10px">
+            <div class="stat-label">Pendiente cobro</div>
+            <div class="stat-value" id="stat-pendiente">$0</div>
+            <div class="stat-sub">a cobrar</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="table-container">
+          <div class="table-header">
+            <span class="section-title" style="margin:0">Próximos turnos</span>
+            <button class="btn btn-sm btn-outline" onclick="showView('turnos')">Ver todos</button>
+          </div>
+          <div id="dashboard-turnos" style="padding:16px">
+            <div class="empty-state"><p>No hay turnos próximos</p></div>
+          </div>
+        </div>
+        <div class="table-container">
+          <div class="table-header">
+            <span class="section-title" style="margin:0">Últimas sesiones</span>
+            <button class="btn btn-sm btn-outline" onclick="showView('sesiones')">Ver todas</button>
+          </div>
+          <div id="dashboard-sesiones" style="padding:16px">
+            <div class="empty-state"><p>No hay sesiones recientes</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CLIENTES ─── -->
+    <div class="view" id="view-clientes">
+      <div class="table-container">
+        <div class="table-header">
+          <div class="search-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--stone)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar cliente..." id="search-clientes" oninput="renderClientes()">
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select class="form-control" style="width:auto;font-size:12px;padding:7px 10px" id="sort-clientes" onchange="renderClientes()">
+              <option value="nombre">Nombre A-Z</option>
+              <option value="fecha">Última sesión</option>
+              <option value="sesiones">Más sesiones</option>
+            </select>
+            <button class="btn btn-primary" onclick="openClienteModal()">+ Nuevo cliente</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Teléfono</th>
+              <th>Sesiones</th>
+              <th>Última visita</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-clientes">
+            <tr class="no-data-row"><td colspan="6">No hay clientes aún</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── TURNOS ─── -->
+    <div class="view" id="view-turnos">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+        <button class="btn btn-primary" onclick="openTurnoModal()">+ Nuevo turno</button>
+      </div>
+      <div class="table-container">
+        <div class="table-header">
+          <div class="filter-tabs" id="turnos-filter">
+            <span class="filter-tab active" onclick="filterTurnos('todos',this)">Todos</span>
+            <span class="filter-tab" onclick="filterTurnos('hoy',this)">Hoy</span>
+            <span class="filter-tab" onclick="filterTurnos('semana',this)">Esta semana</span>
+            <span class="filter-tab" onclick="filterTurnos('mes',this)">Este mes</span>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha y hora</th>
+              <th>Cliente</th>
+              <th>Tipo sesión</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-turnos">
+            <tr class="no-data-row"><td colspan="5">No hay turnos</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── SESIONES ─── -->
+    <div class="view" id="view-sesiones">
+      <div class="table-container">
+        <div class="table-header">
+          <div class="filter-tabs" id="sesiones-filter">
+            <span class="filter-tab active" onclick="filterSesiones('todos',this)">Todas</span>
+            <span class="filter-tab" onclick="filterSesiones('mes',this)">Este mes</span>
+            <span class="filter-tab" onclick="filterSesiones('pendiente',this)">Pendiente cobro</span>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Tipo</th>
+              <th>Precio</th>
+              <th>Pago</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabla-sesiones">
+            <tr class="no-data-row"><td colspan="6">No hay sesiones registradas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── CONFIGURACIÓN ─── -->
+    <div class="view" id="view-config">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+
+        <div>
+          <div class="settings-card">
+            <h3>Tipos de sesión</h3>
+            <div id="tipos-sesion-list"></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:8px" onclick="openTipoModal()">+ Agregar tipo</button>
+          </div>
+
+          <div class="settings-card">
+            <h3>Descuentos por fidelidad</h3>
+            <p class="text-muted" style="margin-bottom:12px">Configurá cuántas sesiones activan un descuento automático</p>
+            <div class="form-grid form-grid-2" style="margin-bottom:12px">
+              <div class="form-group">
+                <label>Cada N sesiones</label>
+                <input type="number" class="form-control" id="desc-cada" placeholder="ej: 10" min="1">
+              </div>
+              <div class="form-group">
+                <label>% Descuento</label>
+                <input type="number" class="form-control" id="desc-pct" placeholder="ej: 20" min="1" max="100">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:12px">
+              <label>Nota para el cliente</label>
+              <input type="text" class="form-control" id="desc-nota" placeholder="ej: ¡10ma sesión, te regalo el 20%!">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveDescuentoConfig()">Guardar configuración</button>
+            <div id="desc-config-display" style="margin-top:12px"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="settings-card">
+            <h3>Conexión Supabase</h3>
+            <p class="text-muted" style="margin-bottom:12px">Estado de la conexión con tu base de datos</p>
+            <div id="config-db-status" style="margin-bottom:12px"></div>
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('supabase-setup').style.display='flex'">Reconfigurar</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════════════════
+     MODAL: CLIENTE
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-cliente">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-cliente-title">Nuevo cliente</div>
+        <div class="modal-subtitle">Ficha de historia clínica holística</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-cliente')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'tab-datos')">Datos personales</div>
+        <div class="tab" onclick="switchTab(this,'tab-habitos')">Hábitos & Salud</div>
+        <div class="tab" onclick="switchTab(this,'tab-fisico')">Físico & Emocional</div>
+      </div>
+
+      <!-- TAB DATOS -->
+      <div class="tab-content active" id="tab-datos">
+        <input type="hidden" id="cliente-id">
+        <div class="form-section">
+          <div class="form-section-title">Información personal</div>
+          <div class="form-grid form-grid-3">
+            <div class="form-group">
+              <label>Nombre *</label>
+              <input class="form-control" id="c-nombre" placeholder="Nombre">
+            </div>
+            <div class="form-group">
+              <label>Apellido *</label>
+              <input class="form-control" id="c-apellido" placeholder="Apellido">
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input class="form-control" id="c-telefono" placeholder="+54 11 ...">
+            </div>
+          </div>
+          <div class="form-grid form-grid-3" style="margin-top:12px">
+            <div class="form-group">
+              <label>Email</label>
+              <input class="form-control" id="c-email" type="email" placeholder="email@...">
+            </div>
+            <div class="form-group">
+              <label>Fecha de nacimiento</label>
+              <input class="form-control" id="c-fnac" type="date">
+            </div>
+            <div class="form-group">
+              <label>Cómo nos conoció</label>
+              <input class="form-control" id="c-origen" list="origen-list" placeholder="Seleccioná o escribí...">
+              <datalist id="origen-list">
+                <option value="Redes sociales">
+                <option value="Boca a boca">
+                <option value="Google">
+                <option value="Derivación profesional">
+                <option value="Instagram">
+                <option value="Facebook">
+                <option value="Amiga / conocida">
+                <option value="Otra terapeuta">
+                <option value="Otro">
+              </datalist>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Contexto de vida</div>
+          <div class="form-grid form-grid-3">
+            <div class="form-group">
+              <label>Profesión / Ocupación</label>
+              <input class="form-control" id="c-profesion" list="profesion-list" placeholder="ej: Docente">
+              <datalist id="profesion-list">
+                <option value="Docente"><option value="Médico/a"><option value="Enfermero/a">
+                <option value="Psicólogo/a"><option value="Abogado/a"><option value="Contador/a">
+                <option value="Diseñador/a"><option value="Comerciante"><option value="Ama/o de casa">
+                <option value="Estudiante"><option value="Jubilado/a"><option value="Artista">
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label>Estado civil</label>
+              <select class="form-control" id="c-civil">
+                <option value="">Seleccionar...</option>
+                <option>Soltera/o</option>
+                <option>En pareja</option>
+                <option>Casada/o</option>
+                <option>Divorciada/o</option>
+                <option>Viuda/o</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>¿Tiene hijos?</label>
+              <select class="form-control" id="c-hijos">
+                <option value="">Seleccionar...</option>
+                <option value="no">No</option>
+                <option value="si">Sí</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid form-grid-2" style="margin-top:12px">
+            <div class="form-group">
+              <label>Cantidad / edades de hijos</label>
+              <input class="form-control" id="c-hijos-detalle" placeholder="ej: 2 hijos, 5 y 8 años">
+            </div>
+            <div class="form-group">
+              <label>Convive con</label>
+              <input class="form-control" id="c-convive" placeholder="ej: pareja e hijos">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Motivo de consulta</div>
+          <div class="form-group">
+            <label>¿Por qué viene? ¿Qué busca?</label>
+            <textarea class="form-control" id="c-motivo" rows="3" placeholder="Describir el motivo de consulta y objetivos del cliente..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB HÁBITOS -->
+      <div class="tab-content" id="tab-habitos">
+        <div class="form-section">
+          <div class="form-section-title">Actividad física</div>
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label>¿Realiza actividad física?</label>
+              <select class="form-control" id="c-actfisica">
+                <option value="">Seleccionar...</option>
+                <option>No realiza</option>
+                <option>Esporádicamente</option>
+                <option>1-2 veces por semana</option>
+                <option>3-4 veces por semana</option>
+                <option>Diariamente</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tipo de actividad</label>
+              <input class="form-control" id="c-actfisica-tipo" list="actfis-list" placeholder="ej: Yoga, caminatas, gym...">
+              <datalist id="actfis-list">
+                <option value="Yoga"><option value="Pilates"><option value="Caminatas"><option value="Natación">
+                <option value="Gym / musculación"><option value="Running"><option value="Danza"><option value="Bicicleta">
+                <option value="Meditación"><option value="Tai Chi">
+              </datalist>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Alimentación</div>
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label>Tipo de alimentación</label>
+              <select class="form-control" id="c-alimentacion">
+                <option value="">Seleccionar...</option>
+                <option>Omnívora</option>
+                <option>Vegetariana</option>
+                <option>Vegana</option>
+                <option>Sin gluten</option>
+                <option>Sin lactosa</option>
+                <option>Otra</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Observaciones alimentarias</label>
+              <input class="form-control" id="c-alimentacion-obs" placeholder="alergias, intolerancias...">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label>Descripción general de su alimentación</label>
+            <textarea class="form-control" id="c-alimentacion-detalle" rows="2" placeholder="Cómo se alimenta habitualmente..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Hidratación & Evacuación</div>
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label>Consumo de líquidos diario</label>
+              <select class="form-control" id="c-liquidos">
+                <option value="">Seleccionar...</option>
+                <option>Menos de 1 litro</option>
+                <option>1 a 2 litros</option>
+                <option>Más de 2 litros</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tipo de líquidos que consume</label>
+              <input class="form-control" id="c-liquidos-tipo" placeholder="ej: agua, mate, infusiones...">
+            </div>
+          </div>
+          <div class="form-grid form-grid-2" style="margin-top:12px">
+            <div class="form-group">
+              <label>Evacuación intestinal</label>
+              <select class="form-control" id="c-evacuacion">
+                <option value="">Seleccionar...</option>
+                <option>Diaria</option>
+                <option>Cada 2 días</option>
+                <option>Cada 3 días o más</option>
+                <option>Irregular</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Observaciones evacuación</label>
+              <input class="form-control" id="c-evacuacion-obs" placeholder="estreñimiento, colitis...">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Descanso & Sueño</div>
+          <div class="form-grid form-grid-3">
+            <div class="form-group">
+              <label>Horas de sueño</label>
+              <select class="form-control" id="c-sueño">
+                <option value="">Seleccionar...</option>
+                <option>Menos de 5hs</option>
+                <option>5 a 6hs</option>
+                <option>7 a 8hs</option>
+                <option>Más de 8hs</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Calidad del sueño</label>
+              <select class="form-control" id="c-sueño-calidad">
+                <option value="">Seleccionar...</option>
+                <option>Muy buena</option>
+                <option>Buena</option>
+                <option>Regular</option>
+                <option>Mala</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Observaciones</label>
+              <input class="form-control" id="c-sueño-obs" placeholder="insomnio, apnea...">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB FÍSICO/EMOCIONAL -->
+      <div class="tab-content" id="tab-fisico">
+        <div class="form-section">
+          <div class="form-section-title">Evaluación física</div>
+          <div class="form-group">
+            <label>Zonas de tensión / dolor</label>
+            <textarea class="form-control" id="c-tension" rows="3" placeholder="Describir zonas de tensión, contracturas, dolores crónicos..."></textarea>
+          </div>
+          <div class="form-grid form-grid-2" style="margin-top:12px">
+            <div class="form-group">
+              <label>Patologías / condiciones físicas</label>
+              <textarea class="form-control" id="c-patologias" rows="3" placeholder="Hernias, escoliosis, artritis, cirugías..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Medicación actual</label>
+              <textarea class="form-control" id="c-medicacion" rows="3" placeholder="Medicamentos que toma habitualmente..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Evaluación emocional</div>
+          <div class="form-group">
+            <label>Estado emocional general</label>
+            <textarea class="form-control" id="c-emocional" rows="3" placeholder="Describir el estado emocional, niveles de estrés, situaciones de vida..."></textarea>
+          </div>
+          <div class="form-grid form-grid-2" style="margin-top:12px">
+            <div class="form-group">
+              <label>Nivel de estrés percibido (1-10)</label>
+              <input class="form-control" id="c-estres" type="number" min="1" max="10" placeholder="1 a 10">
+            </div>
+            <div class="form-group">
+              <label>Terapia psicológica / espiritual</label>
+              <input class="form-control" id="c-terapia-otro" placeholder="ej: psicóloga, meditación...">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label>Notas adicionales / Observaciones generales</label>
+            <textarea class="form-control" id="c-notas-generales" rows="3" placeholder="Cualquier otra observación relevante para el tratamiento..."></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-cliente')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveCliente()">Guardar ficha</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MODAL: FICHA CLIENTE (VER)
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-ficha">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="ficha-titulo">Ficha de cliente</div>
+        <div class="modal-subtitle" id="ficha-subtitle"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-outline btn-sm" id="btn-edit-cliente" onclick="">Editar</button>
+        <button class="modal-close" onclick="closeModal('modal-ficha')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body" id="ficha-body">
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MODAL: SESIÓN
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-sesion">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-sesion-title">Registrar sesión</div>
+        <div class="modal-subtitle">Cargar datos de la sesión realizada</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-sesion')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="sesion-id">
+      <input type="hidden" id="sesion-cliente-id">
+      <div class="form-grid form-grid-2">
+        <div class="form-group">
+          <label>Cliente *</label>
+          <select class="form-control" id="sesion-cliente" onchange="onSesionClienteChange()">
+            <option value="">Seleccionar cliente...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha *</label>
+          <input class="form-control" id="sesion-fecha" type="date">
+        </div>
+      </div>
+      <div class="form-grid form-grid-2" style="margin-top:12px">
+        <div class="form-group">
+          <label>Tipo de sesión *</label>
+          <select class="form-control" id="sesion-tipo" onchange="onSesionTipoChange()">
+            <option value="">Seleccionar...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Precio</label>
+          <input class="form-control" id="sesion-precio" type="number" placeholder="0">
+        </div>
+      </div>
+      <div id="descuento-aviso" style="display:none;margin-top:10px;padding:10px 14px;background:rgba(122,158,126,.12);border-radius:6px;border:1px solid var(--sage-light);font-size:12px;color:var(--sage)"></div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Notas de la sesión</label>
+        <textarea class="form-control" id="sesion-notas" rows="4" placeholder="¿Cómo fue la sesión? ¿Qué trabajaste? ¿Cómo llegó/se fue el cliente?..."></textarea>
+      </div>
+      <div class="form-grid form-grid-2" style="margin-top:12px">
+        <div class="form-group">
+          <label>Estado de pago</label>
+          <select class="form-control" id="sesion-pago">
+            <option value="pendiente">Pendiente</option>
+            <option value="cobrado">Cobrado</option>
+            <option value="parcial">Pago parcial</option>
+            <option value="bonificado">Bonificado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Método de pago</label>
+          <select class="form-control" id="sesion-metodo">
+            <option value="">—</option>
+            <option>Efectivo</option>
+            <option>Transferencia</option>
+            <option>Tarjeta</option>
+            <option>Mercado Pago</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-sesion')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveSesion()">Guardar sesión</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MODAL: TURNO
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-turno">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title">Nuevo turno</div></div>
+      <button class="modal-close" onclick="closeModal('modal-turno')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="turno-id">
+      <div class="form-grid form-grid-2">
+        <div class="form-group">
+          <label>Cliente</label>
+          <select class="form-control" id="turno-cliente">
+            <option value="">Seleccionar...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha *</label>
+          <input class="form-control" id="turno-fecha" type="date">
+        </div>
+      </div>
+      <div class="form-grid form-grid-2" style="margin-top:12px">
+        <div class="form-group">
+          <label>Hora</label>
+          <input class="form-control" id="turno-hora" type="time">
+        </div>
+        <div class="form-group">
+          <label>Tipo de sesión</label>
+          <select class="form-control" id="turno-tipo">
+            <option value="">Seleccionar...</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Notas del turno</label>
+        <textarea class="form-control" id="turno-notas" rows="2" placeholder="Recordatorios, indicaciones previas..."></textarea>
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Estado</label>
+        <select class="form-control" id="turno-estado">
+          <option value="confirmado">Confirmado</option>
+          <option value="pendiente">Pendiente confirmación</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-turno')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveTurno()">Guardar turno</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MODAL: TIPO SESIÓN
+═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-tipo">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <div><div class="modal-title">Tipo de sesión</div></div>
+      <button class="modal-close" onclick="closeModal('modal-tipo')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="tipo-id">
+      <div class="form-group">
+        <label>Nombre del tipo *</label>
+        <input class="form-control" id="tipo-nombre" placeholder="ej: Masaje relajante, Reflexología...">
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Descripción</label>
+        <input class="form-control" id="tipo-desc" placeholder="Breve descripción">
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Precio base ($)</label>
+        <input class="form-control" id="tipo-precio" type="number" placeholder="0">
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>Duración estimada</label>
+        <input class="form-control" id="tipo-duracion" placeholder="ej: 60 minutos">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-tipo')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveTipo()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  ESTADO GLOBAL
+// ═══════════════════════════════════════════════
+let SB = null; // Supabase client
+let DEMO = false;
+
+let DB = {
+  clientes: [],
+  sesiones: [],
+  turnos: [],
+  tipos: [],
+  config: { descuento_cada: null, descuento_pct: null, descuento_nota: '' }
+};
+
+// ─── SUPABASE ───
+async function initSupabase(url, key) {
+  try {
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+    SB = createClient(url, key);
+    // test connection
+    const { error } = await SB.from('clientes').select('count', { count: 'exact', head: true });
+    if (error && error.code !== '42P01') throw error;
+    return true;
+  } catch(e) {
+    console.warn('Supabase error:', e);
+    return false;
+  }
+}
+
+async function saveSupabaseConfig() {
+  const url = document.getElementById('setup-url').value.trim();
+  const key = document.getElementById('setup-key').value.trim();
+  if (!url || !key) { toast('Completá los dos campos'); return; }
+  localStorage.setItem('calma_sb_url', url);
+  localStorage.setItem('calma_sb_key', key);
+  const ok = await initSupabase(url, key);
+  if (ok) {
+    await ensureTables();
+    await loadAll();
+    startApp();
+    toast('✓ Conectado a Supabase');
+  } else {
+    toast('Error al conectar. Verificá las credenciales.');
+  }
+}
+
+function useDemoMode() {
+  DEMO = true;
+  loadDemoData();
+  startApp();
+  toast('Modo demo activo (datos en memoria)');
+}
+
+function startApp() {
+  document.getElementById('supabase-setup').style.display = 'none';
+  updateDbStatus();
+  renderAll();
+}
+
+function updateDbStatus() {
+  const dot = document.getElementById('db-dot');
+  const lbl = document.getElementById('db-label');
+  const cfg = document.getElementById('config-db-status');
+  if (DEMO) {
+    dot.style.background = 'var(--warning)';
+    lbl.textContent = 'Modo demo';
+    if(cfg) cfg.innerHTML = '<span class="badge badge-orange">Modo demo — datos en memoria</span>';
+  } else if (SB) {
+    dot.style.background = 'var(--success)';
+    lbl.textContent = 'Supabase conectado';
+    if(cfg) cfg.innerHTML = '<span class="badge badge-green">✓ Conectado</span>';
+  }
+}
+
+// ─── CREAR TABLAS SI NO EXISTEN ───
+async function ensureTables() {
+  if (!SB) return;
+  // We try inserts; if table doesn't exist Supabase returns 42P01
+  // We attempt to create via RPC or just catch errors silently
+  // The user should create tables manually in Supabase - we'll show the SQL
+  try {
+    await SB.from('calma_tipos').select('id').limit(1);
+    await SB.from('calma_clientes').select('id').limit(1);
+    await SB.from('calma_sesiones').select('id').limit(1);
+    await SB.from('calma_turnos').select('id').limit(1);
+    await SB.from('calma_config').select('key').limit(1);
+  } catch(e) {}
+}
+
+// ─── LOAD ALL ───
+async function loadAll() {
+  if (!SB) return;
+  try {
+    const [t, c, s, tu, cfg] = await Promise.all([
+      SB.from('calma_tipos').select('*').order('nombre'),
+      SB.from('calma_clientes').select('*').order('apellido'),
+      SB.from('calma_sesiones').select('*').order('fecha', {ascending:false}),
+      SB.from('calma_turnos').select('*').order('fecha'),
+      SB.from('calma_config').select('*')
+    ]);
+    if (t.data) DB.tipos = t.data;
+    if (c.data) DB.clientes = c.data;
+    if (s.data) DB.sesiones = s.data;
+    if (tu.data) DB.turnos = tu.data;
+    if (cfg.data && cfg.data.length) {
+      cfg.data.forEach(r => {
+        if (r.key === 'descuento') DB.config = JSON.parse(r.value);
+      });
+    }
+  } catch(e) { console.warn('Load error:', e); }
+}
+
+// ─── SAVE HELPERS ───
+async function dbSave(table, item) {
+  if (DEMO) {
+    if (!item.id) item.id = 'demo-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    return item;
+  }
+  if (!SB) return item;
+  if (item.id) {
+    const { data } = await SB.from(table).update(item).eq('id', item.id).select().single();
+    return data || item;
+  } else {
+    const { data } = await SB.from(table).insert(item).select().single();
+    return data || item;
+  }
+}
+
+async function dbDelete(table, id) {
+  if (DEMO || !SB) return;
+  await SB.from(table).delete().eq('id', id);
+}
+
+// ─── DEMO DATA ───
+function loadDemoData() {
+  DB.tipos = [
+    { id:'t1', nombre:'Masaje relajante', precio:4500, duracion:'60 minutos', descripcion:'Técnica sueca, alivia tensiones' },
+    { id:'t2', nombre:'Masaje descontracturante', precio:5500, duracion:'70 minutos', descripcion:'Trabajo profundo en zonas contracturadas' },
+    { id:'t3', nombre:'Reflexología podal', precio:4000, duracion:'50 minutos', descripcion:'Trabajo en puntos reflejos del pie' },
+    { id:'t4', nombre:'Shiatsu', precio:5000, duracion:'60 minutos', descripcion:'Presión en meridianos energéticos' },
+  ];
+  DB.clientes = [
+    { id:'c1', nombre:'Valentina', apellido:'Moreno', telefono:'1154321098', email:'vale@mail.com', profesion:'Profesora', sesiones_count:8, ultima_sesion:'2025-01-10', activo:true },
+    { id:'c2', nombre:'Laura', apellido:'Fernández', telefono:'1167891234', email:'lau@mail.com', profesion:'Contadora', sesiones_count:3, ultima_sesion:'2025-01-08', activo:true },
+    { id:'c3', nombre:'Martín', apellido:'García', telefono:'1145678901', email:'martin@mail.com', profesion:'Ingeniero', sesiones_count:12, ultima_sesion:'2025-01-05', activo:true },
+  ];
+  DB.sesiones = [
+    { id:'s1', cliente_id:'c1', tipo_id:'t1', fecha:'2025-01-10', precio:4500, pago:'cobrado', metodo:'Transferencia', notas:'Llegó muy tensa del trabajo. Trabajamos zona cervical. Se fue muy relajada.' },
+    { id:'s2', cliente_id:'c2', tipo_id:'t3', fecha:'2025-01-08', precio:4000, pago:'cobrado', metodo:'Efectivo', notas:'Primera sesión. Le gustó mucho la reflexología.' },
+    { id:'s3', cliente_id:'c3', tipo_id:'t2', fecha:'2025-01-05', precio:5500, pago:'pendiente', metodo:'', notas:'Contractura lumbar severa. Mejoró notablemente al final.' },
+  ];
+  DB.turnos = [
+    { id:'tu1', cliente_id:'c1', tipo_id:'t1', fecha:'2025-01-20', hora:'10:00', estado:'confirmado', notas:'' },
+    { id:'tu2', cliente_id:'c2', tipo_id:'t2', fecha:'2025-01-22', hora:'16:00', estado:'confirmado', notas:'' },
+  ];
+}
+
+// ═══════════════════════════════════════════════
+//  VIEWS
+// ═══════════════════════════════════════════════
+const viewTitles = {
+  dashboard:'Inicio', clientes:'Clientes', turnos:'Turnos',
+  sesiones:'Sesiones', config:'Configuración'
+};
+const topbarExtras = {
+  sesiones: '<button class="btn btn-primary" onclick="openSesionModal()">+ Nueva sesión</button>',
+};
+
+function showView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item')[['dashboard','clientes','turnos','sesiones','config'].indexOf(v)].classList.add('active');
+  document.getElementById('page-title').textContent = viewTitles[v];
+  const ta = document.getElementById('topbar-actions');
+  ta.innerHTML = `<div id="db-status" style="font-size:11px;letter-spacing:.5px;color:var(--text-light);display:flex;align-items:center;gap:6px">
+    <span id="db-dot" style="width:7px;height:7px;border-radius:50%;background:var(--stone-light);display:inline-block"></span>
+    <span id="db-label">Sin conexión</span>
+  </div>${topbarExtras[v]||''}`;
+  updateDbStatus();
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════
+function renderAll() {
+  renderDashboard();
+  renderClientes();
+  renderTurnos();
+  renderSesiones();
+  renderConfig();
+}
+
+// ─── DASHBOARD ───
+function renderDashboard() {
+  document.getElementById('stat-clientes').textContent = DB.clientes.length;
+  const now = new Date();
+  const mes = now.getMonth(); const año = now.getFullYear();
+  const sesionesMes = DB.sesiones.filter(s => {
+    const d = new Date(s.fecha);
+    return d.getMonth()===mes && d.getFullYear()===año;
+  });
+  document.getElementById('stat-sesiones').textContent = sesionesMes.length;
+  const cobrado = sesionesMes.filter(s=>s.pago==='cobrado').reduce((a,b)=>a+(+b.precio||0),0);
+  const pendiente = DB.sesiones.filter(s=>s.pago==='pendiente').reduce((a,b)=>a+(+b.precio||0),0);
+  document.getElementById('stat-ingresos').textContent = '$'+cobrado.toLocaleString('es-AR');
+  document.getElementById('stat-pendiente').textContent = '$'+pendiente.toLocaleString('es-AR');
+
+  // Próximos turnos
+  const hoy = now.toISOString().split('T')[0];
+  const prox = DB.turnos.filter(t=>t.fecha>=hoy && t.estado!=='cancelado')
+    .sort((a,b)=>a.fecha.localeCompare(b.fecha)).slice(0,4);
+  const dtEl = document.getElementById('dashboard-turnos');
+  if (!prox.length) {
+    dtEl.innerHTML = '<div class="empty-state"><p>No hay turnos próximos</p></div>';
+  } else {
+    dtEl.innerHTML = prox.map(t => {
+      const cl = DB.clientes.find(c=>c.id===t.cliente_id);
+      const parts=t.fecha.split('-');const d=new Date(+parts[0],+parts[1]-1,+parts[2]);
+      const dia = d.getDate();
+      const mes = d.toLocaleDateString('es',{month:'short'}).replace('.','');
+      return `<div class="turno-item">
+        <div class="turno-date-box"><div class="day">${dia}</div><div class="month">${mes}</div></div>
+        <div>
+          <div style="font-weight:500;font-size:13px">${cl?cl.nombre+' '+cl.apellido:'—'}</div>
+          <div style="font-size:11px;color:var(--text-light)">${t.hora||''} ${getTipoNombre(t.tipo_id)}</div>
+        </div>
+        <div style="margin-left:auto">${badgeEstadoTurno(t.estado)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Últimas sesiones
+  const ult = [...DB.sesiones].sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,4);
+  const dsEl = document.getElementById('dashboard-sesiones');
+  if (!ult.length) {
+    dsEl.innerHTML = '<div class="empty-state"><p>No hay sesiones recientes</p></div>';
+  } else {
+    dsEl.innerHTML = ult.map(s => {
+      const cl = DB.clientes.find(c=>c.id===s.cliente_id);
+      return `<div class="turno-item">
+        <div style="min-width:56px;text-align:center">
+          <div style="font-size:12px;color:var(--text-light)">${formatFecha(s.fecha)}</div>
+        </div>
+        <div>
+          <div style="font-weight:500;font-size:13px">${cl?cl.nombre+' '+cl.apellido:'—'}</div>
+          <div style="font-size:11px;color:var(--text-light)">${getTipoNombre(s.tipo_id)}</div>
+        </div>
+        <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          <div style="font-size:13px;font-weight:500;color:var(--terracota)">$${(+s.precio||0).toLocaleString('es-AR')}</div>
+          ${badgePago(s.pago)}
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+// ─── CLIENTES ───
+function renderClientes() {
+  const q = (document.getElementById('search-clientes')||{}).value||'';
+  const sort = (document.getElementById('sort-clientes')||{}).value||'nombre';
+  let list = DB.clientes.filter(c => {
+    const full = (c.nombre+' '+c.apellido+' '+(c.email||'')+(c.telefono||'')).toLowerCase();
+    return full.includes(q.toLowerCase());
+  });
+  if (sort==='nombre') list.sort((a,b)=>((a.apellido||'')+(a.nombre||'')).localeCompare((b.apellido||'')+(b.nombre||'')));
+  else if (sort==='fecha') list.sort((a,b)=>(b.ultima_sesion||'').localeCompare(a.ultima_sesion||''));
+  else if (sort==='sesiones') list.sort((a,b)=>(b.sesiones_count||0)-(a.sesiones_count||0));
+
+  const tbody = document.getElementById('tabla-clientes');
+  if (!list.length) {
+    tbody.innerHTML = '<tr class="no-data-row"><td colspan="6">No hay clientes registrados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(c => `
+    <tr onclick="openFicha('${c.id}')">
+      <td class="td-name">${c.apellido||''}, ${c.nombre||''}</td>
+      <td>${c.telefono||'—'}</td>
+      <td>${c.sesiones_count||0}</td>
+      <td>${c.ultima_sesion?formatFecha(c.ultima_sesion):'—'}</td>
+      <td>${c.activo===false?'<span class="badge badge-stone">Inactivo</span>':'<span class="badge badge-green">Activo</span>'}</td>
+      <td style="text-align:right">
+        <button class="btn-icon" onclick="event.stopPropagation();openSesionModal('${c.id}')" title="Nueva sesión">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <button class="btn-icon" onclick="event.stopPropagation();openClienteModal('${c.id}')" title="Editar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="btn-icon" onclick="event.stopPropagation();deleteCliente('${c.id}')" title="Eliminar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+        </button>
+      </td>
+    </tr>`).join('');
+}
+
+// ─── TURNOS ───
+let turnoFilter = 'todos';
+function filterTurnos(f, el) {
+  turnoFilter = f;
+  document.querySelectorAll('#turnos-filter .filter-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderTurnos();
+}
+function renderTurnos() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const semFin = new Date(Date.now()+7*86400000).toISOString().split('T')[0];
+  const mesFin = new Date(new Date().getFullYear(),new Date().getMonth()+1,0).toISOString().split('T')[0];
+  const mesIni = new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString().split('T')[0];
+
+  let list = [...DB.turnos].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  if (turnoFilter==='hoy') list = list.filter(t=>t.fecha===hoy);
+  else if (turnoFilter==='semana') list = list.filter(t=>t.fecha>=hoy && t.fecha<=semFin);
+  else if (turnoFilter==='mes') list = list.filter(t=>t.fecha>=mesIni && t.fecha<=mesFin);
+
+  const tbody = document.getElementById('tabla-turnos');
+  if (!list.length) { tbody.innerHTML = '<tr class="no-data-row"><td colspan="5">No hay turnos</td></tr>'; return; }
+  tbody.innerHTML = list.map(t => {
+    const cl = DB.clientes.find(c=>c.id===t.cliente_id);
+    return `<tr>
+      <td>${formatFecha(t.fecha)} ${t.hora?'· '+t.hora:''}</td>
+      <td class="td-name">${cl?cl.nombre+' '+cl.apellido:'—'}</td>
+      <td>${getTipoNombre(t.tipo_id)||'—'}</td>
+      <td>${badgeEstadoTurno(t.estado)}</td>
+      <td style="text-align:right">
+        <button class="btn btn-sm btn-outline" onclick="convertirTurnoSesion('${t.id}')">→ Sesión</button>
+        <button class="btn-icon" onclick="deleteTurno('${t.id}')" title="Eliminar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── SESIONES ───
+let sesionFilter = 'todos';
+function filterSesiones(f, el) {
+  sesionFilter = f;
+  document.querySelectorAll('#sesiones-filter .filter-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderSesiones();
+}
+function renderSesiones() {
+  const mesIni = new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString().split('T')[0];
+  let list = [...DB.sesiones].sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  if (sesionFilter==='mes') list = list.filter(s=>s.fecha>=mesIni);
+  else if (sesionFilter==='pendiente') list = list.filter(s=>s.pago==='pendiente');
+
+  const tbody = document.getElementById('tabla-sesiones');
+  if (!list.length) { tbody.innerHTML = '<tr class="no-data-row"><td colspan="6">No hay sesiones</td></tr>'; return; }
+  tbody.innerHTML = list.map(s => {
+    const cl = DB.clientes.find(c=>c.id===s.cliente_id);
+    return `<tr onclick="openSesionModal(null,'${s.id}')">
+      <td>${formatFecha(s.fecha)}</td>
+      <td class="td-name">${cl?cl.nombre+' '+cl.apellido:'—'}</td>
+      <td>${getTipoNombre(s.tipo_id)||'—'}</td>
+      <td style="color:var(--terracota);font-weight:500">$${(+s.precio||0).toLocaleString('es-AR')}</td>
+      <td>${badgePago(s.pago)}</td>
+      <td style="text-align:right">
+        <button class="btn-icon" onclick="event.stopPropagation();togglePago('${s.id}')" title="Cambiar estado pago">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg>
+        </button>
+        <button class="btn-icon" onclick="event.stopPropagation();deleteSesion('${s.id}')" title="Eliminar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── CONFIG ───
+function renderConfig() {
+  // Tipos
+  const tl = document.getElementById('tipos-sesion-list');
+  if (!DB.tipos.length) {
+    tl.innerHTML = '<p class="text-muted">No hay tipos de sesión configurados</p>';
+  } else {
+    tl.innerHTML = DB.tipos.map(t => `
+      <div class="session-type-item">
+        <div>
+          <div class="session-type-name">${t.nombre}</div>
+          <div style="font-size:11px;color:var(--text-light)">${t.duracion||''} ${t.descripcion?'· '+t.descripcion:''}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="session-type-price">$${(+t.precio||0).toLocaleString('es-AR')}</span>
+          <button class="btn-icon" onclick="openTipoModal('${t.id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="btn-icon" onclick="deleteTipo('${t.id}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+      </div>`).join('');
+  }
+  // Descuento
+  const cfg = DB.config;
+  const dd = document.getElementById('desc-config-display');
+  if (cfg && cfg.descuento_cada) {
+    dd.innerHTML = `<div class="session-type-item">
+      <div><span class="badge badge-green">Activo</span></div>
+      <div style="font-size:12px;color:var(--text-mid)">Cada ${cfg.descuento_cada} sesiones → ${cfg.descuento_pct}% off${cfg.descuento_nota?' · "'+cfg.descuento_nota+'"':''}</div>
+    </div>`;
+    document.getElementById('desc-cada').value = cfg.descuento_cada;
+    document.getElementById('desc-pct').value = cfg.descuento_pct;
+    document.getElementById('desc-nota').value = cfg.descuento_nota||'';
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  MODALES
+// ═══════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ─── CLIENTE ───
+function openClienteModal(id) {
+  clearClienteForm();
+  if (id) {
+    const c = DB.clientes.find(x=>x.id===id);
+    if (!c) return;
+    document.getElementById('modal-cliente-title').textContent = 'Editar ficha';
+    fillClienteForm(c);
+  } else {
+    document.getElementById('modal-cliente-title').textContent = 'Nuevo cliente';
+  }
+  // reset tabs
+  document.querySelectorAll('#modal-cliente .tab').forEach((t,i)=>{
+    t.classList.toggle('active',i===0);
+  });
+  document.querySelectorAll('#modal-cliente .tab-content').forEach((t,i)=>{
+    t.classList.toggle('active',i===0);
+  });
+  openModal('modal-cliente');
+}
+
+function clearClienteForm() {
+  ['cliente-id','c-nombre','c-apellido','c-telefono','c-email','c-fnac','c-profesion',
+   'c-motivo','c-actfisica-tipo','c-alimentacion-obs','c-alimentacion-detalle',
+   'c-liquidos-tipo','c-evacuacion-obs','c-sueño-obs','c-tension','c-patologias',
+   'c-medicacion','c-emocional','c-estres','c-terapia-otro','c-notas-generales',
+   'c-hijos-detalle','c-convive'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['c-origen','c-civil','c-hijos','c-actfisica','c-alimentacion','c-liquidos',
+   'c-evacuacion','c-sueño'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
+function fillClienteForm(c) {
+  const set = (id, val) => { const el = document.getElementById(id); if(el&&val!=null) el.value = val; };
+  set('cliente-id', c.id);
+  set('c-nombre', c.nombre); set('c-apellido', c.apellido);
+  set('c-telefono', c.telefono); set('c-email', c.email);
+  set('c-fnac', c.fnac); set('c-origen', c.origen);
+  set('c-profesion', c.profesion); set('c-civil', c.civil);
+  set('c-hijos', c.hijos); set('c-hijos-detalle', c.hijos_detalle);
+  set('c-convive', c.convive); set('c-motivo', c.motivo);
+  set('c-actfisica', c.actfisica); set('c-actfisica-tipo', c.actfisica_tipo);
+  set('c-alimentacion', c.alimentacion); set('c-alimentacion-obs', c.alimentacion_obs);
+  set('c-alimentacion-detalle', c.alimentacion_detalle);
+  set('c-liquidos', c.liquidos); set('c-liquidos-tipo', c.liquidos_tipo);
+  set('c-evacuacion', c.evacuacion); set('c-evacuacion-obs', c.evacuacion_obs);
+  set('c-sueño', c.sueño); set('c-sueño-calidad', c.sueño_calidad);
+  set('c-sueño-obs', c.sueño_obs);
+  set('c-tension', c.tension); set('c-patologias', c.patologias);
+  set('c-medicacion', c.medicacion); set('c-emocional', c.emocional);
+  set('c-estres', c.estres); set('c-terapia-otro', c.terapia_otro);
+  set('c-notas-generales', c.notas_generales);
+}
+
+async function saveCliente() {
+  const nombre = document.getElementById('c-nombre').value.trim();
+  const apellido = document.getElementById('c-apellido').value.trim();
+  if (!nombre || !apellido) { toast('Nombre y apellido son requeridos'); return; }
+  const id = document.getElementById('cliente-id').value;
+  const g = id => (document.getElementById(id)||{}).value||'';
+
+  const item = {
+    nombre, apellido,
+    telefono:g('c-telefono'), email:g('c-email'), fnac:g('c-fnac'), origen:g('c-origen'),
+    profesion:g('c-profesion'), civil:g('c-civil'),
+    hijos:g('c-hijos'), hijos_detalle:g('c-hijos-detalle'), convive:g('c-convive'),
+    motivo:g('c-motivo'),
+    actfisica:g('c-actfisica'), actfisica_tipo:g('c-actfisica-tipo'),
+    alimentacion:g('c-alimentacion'), alimentacion_obs:g('c-alimentacion-obs'),
+    alimentacion_detalle:g('c-alimentacion-detalle'),
+    liquidos:g('c-liquidos'), liquidos_tipo:g('c-liquidos-tipo'),
+    evacuacion:g('c-evacuacion'), evacuacion_obs:g('c-evacuacion-obs'),
+    sueño:g('c-sueño'), sueño_calidad:g('c-sueño-calidad'), sueño_obs:g('c-sueño-obs'),
+    tension:g('c-tension'), patologias:g('c-patologias'), medicacion:g('c-medicacion'),
+    emocional:g('c-emocional'), estres:g('c-estres'), terapia_otro:g('c-terapia-otro'),
+    notas_generales:g('c-notas-generales'),
+    activo: true,
+    sesiones_count: 0
+  };
+  if (id) {
+    item.id = id;
+    const existing = DB.clientes.find(c=>c.id===id);
+    if (existing) { item.sesiones_count = existing.sesiones_count||0; item.ultima_sesion = existing.ultima_sesion; }
+  }
+  const saved = await dbSave('calma_clientes', item);
+  if (id) {
+    const idx = DB.clientes.findIndex(c=>c.id===id);
+    if (idx>=0) DB.clientes[idx] = saved;
+  } else {
+    DB.clientes.push(saved);
+  }
+  closeModal('modal-cliente');
+  renderClientes();
+  renderDashboard();
+  toast('✓ Cliente guardado');
+}
+
+async function deleteCliente(id) {
+  if (!confirm('¿Eliminar este cliente? Se borrarán también sus sesiones y turnos.')) return;
+  DB.clientes = DB.clientes.filter(c=>c.id!==id);
+  DB.sesiones = DB.sesiones.filter(s=>s.cliente_id!==id);
+  DB.turnos = DB.turnos.filter(t=>t.cliente_id!==id);
+  await dbDelete('calma_clientes', id);
+  renderAll();
+  toast('Cliente eliminado');
+}
+
+// ─── FICHA CLIENTE ───
+function openFicha(id) {
+  const c = DB.clientes.find(x=>x.id===id);
+  if (!c) return;
+  document.getElementById('ficha-titulo').textContent = c.nombre+' '+c.apellido;
+  const sesiones = DB.sesiones.filter(s=>s.cliente_id===id);
+  const pendiente = sesiones.filter(s=>s.pago==='pendiente').reduce((a,b)=>a+(+b.precio||0),0);
+  const cobrado = sesiones.filter(s=>s.pago==='cobrado').reduce((a,b)=>a+(+b.precio||0),0);
+  document.getElementById('ficha-subtitle').textContent = `${sesiones.length} sesiones · $${cobrado.toLocaleString('es-AR')} cobrado · $${pendiente.toLocaleString('es-AR')} pendiente`;
+  document.getElementById('btn-edit-cliente').onclick = ()=>{ closeModal('modal-ficha'); openClienteModal(id); };
+
+  const body = document.getElementById('ficha-body');
+  const info = (label, val) => val ? `<div style="margin-bottom:8px"><span style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light)">${label}</span><div style="font-size:13px;color:var(--text-dark);margin-top:2px">${val}</div></div>` : '';
+
+  body.innerHTML = `
+    <div class="client-header">
+      <div class="client-avatar">${(c.nombre||'?')[0]}${(c.apellido||'?')[0]}</div>
+      <div class="client-info">
+        <h2>${c.nombre} ${c.apellido}</h2>
+        <p>${c.profesion||''} ${c.telefono?'· '+c.telefono:''}</p>
+      </div>
+      <div class="client-stats">
+        <div><div class="client-stat-val">${sesiones.length}</div><div class="client-stat-lbl">Sesiones</div></div>
+        <div><div class="client-stat-val">$${cobrado.toLocaleString('es-AR')}</div><div class="client-stat-lbl">Cobrado</div></div>
+        <div><div class="client-stat-val" style="color:${pendiente?'#C46A6A':'inherit'}">$${pendiente.toLocaleString('es-AR')}</div><div class="client-stat-lbl">Pendiente</div></div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'ftab-sesiones')">Sesiones</div>
+      <div class="tab" onclick="switchTab(this,'ftab-datos')">Datos personales</div>
+      <div class="tab" onclick="switchTab(this,'ftab-salud')">Hábitos & Salud</div>
+      <div class="tab" onclick="switchTab(this,'ftab-fisico')">Físico & Emocional</div>
+    </div>
+
+    <div class="tab-content active" id="ftab-sesiones">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="section-title" style="margin:0">Historial de sesiones</div>
+        <button class="btn btn-primary btn-sm" onclick="openSesionModal('${id}')">+ Registrar sesión</button>
+      </div>
+      ${sesiones.length ? sesiones.sort((a,b)=>b.fecha.localeCompare(a.fecha)).map(s => `
+        <div class="session-card">
+          <div class="session-top">
+            <div>
+              <div class="session-date">${formatFecha(s.fecha)}</div>
+              <div class="session-type">${getTipoNombre(s.tipo_id)||'—'}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              ${badgePago(s.pago)}
+              <button class="btn-icon" onclick="togglePago('${s.id}')" title="Cambiar pago">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"/></svg>
+              </button>
+              <button class="btn-icon" onclick="deleteSesion('${s.id}','${id}')" title="Eliminar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              </button>
+            </div>
+          </div>
+          ${s.notas?`<div class="session-notes">${s.notas}</div>`:''}
+          <div class="session-footer">
+            <div class="session-price${s.pago==='cobrado'?' ':''}">$${(+s.precio||0).toLocaleString('es-AR')}</div>
+            ${s.metodo?`<span class="chip">${s.metodo}</span>`:''}
+          </div>
+        </div>`).join('') : '<div class="empty-state"><p>No hay sesiones registradas para este cliente</p></div>'}
+    </div>
+
+    <div class="tab-content" id="ftab-datos">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        ${info('Teléfono',c.telefono)}${info('Email',c.email)}
+        ${info('Nacimiento',c.fnac?formatFecha(c.fnac):'')}${info('Profesión',c.profesion)}
+        ${info('Estado civil',c.civil)}${info('Hijos',c.hijos==='si'?'Sí — '+(c.hijos_detalle||''):c.hijos==='no'?'No':'')}
+        ${info('Convive con',c.convive)}${info('Cómo llegó',c.origen)}
+      </div>
+      ${c.motivo?`<hr class="divider">${info('Motivo de consulta',c.motivo)}`:''}
+    </div>
+
+    <div class="tab-content" id="ftab-salud">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        ${info('Actividad física',c.actfisica+(c.actfisica_tipo?' · '+c.actfisica_tipo:''))}
+        ${info('Alimentación',c.alimentacion+(c.alimentacion_obs?' · '+c.alimentacion_obs:''))}
+        ${info('Descripción alimentaria',c.alimentacion_detalle)}
+        ${info('Líquidos',c.liquidos+(c.liquidos_tipo?' · '+c.liquidos_tipo:''))}
+        ${info('Evacuación',c.evacuacion+(c.evacuacion_obs?' · '+c.evacuacion_obs:''))}
+        ${info('Sueño',c.sueño+' · calidad: '+(c.sueño_calidad||'—')+(c.sueño_obs?' · '+c.sueño_obs:''))}
+      </div>
+    </div>
+
+    <div class="tab-content" id="ftab-fisico">
+      ${info('Zonas de tensión / dolor',c.tension)}
+      ${info('Patologías / condiciones',c.patologias)}
+      ${info('Medicación',c.medicacion)}
+      <hr class="divider">
+      ${info('Estado emocional',c.emocional)}
+      ${info('Nivel de estrés',c.estres?c.estres+'/10':'')}
+      ${info('Terapia / práctica espiritual',c.terapia_otro)}
+      ${info('Observaciones generales',c.notas_generales)}
+    </div>
+  `;
+  openModal('modal-ficha');
+}
+
+// ─── SESIÓN ───
+function openSesionModal(clienteId, sesionId) {
+  document.getElementById('sesion-id').value = '';
+  document.getElementById('sesion-cliente-id').value = '';
+  document.getElementById('sesion-notas').value = '';
+  document.getElementById('sesion-pago').value = 'pendiente';
+  document.getElementById('sesion-metodo').value = '';
+  document.getElementById('sesion-precio').value = '';
+  document.getElementById('sesion-fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('modal-sesion-title').textContent = sesionId ? 'Editar sesión' : 'Registrar sesión';
+  document.getElementById('descuento-aviso').style.display = 'none';
+
+  // Populate clientes select
+  const cs = document.getElementById('sesion-cliente');
+  cs.innerHTML = '<option value="">Seleccionar cliente...</option>' +
+    DB.clientes.map(c=>`<option value="${c.id}">${c.apellido}, ${c.nombre}</option>`).join('');
+  // Populate tipos select
+  const ts = document.getElementById('sesion-tipo');
+  ts.innerHTML = '<option value="">Seleccionar...</option>' +
+    DB.tipos.map(t=>`<option value="${t.id}">${t.nombre} — $${(+t.precio||0).toLocaleString('es-AR')}</option>`).join('');
+
+  if (sesionId) {
+    const s = DB.sesiones.find(x=>x.id===sesionId);
+    if (s) {
+      document.getElementById('sesion-id').value = s.id;
+      document.getElementById('sesion-cliente').value = s.cliente_id;
+      document.getElementById('sesion-tipo').value = s.tipo_id;
+      document.getElementById('sesion-fecha').value = s.fecha;
+      document.getElementById('sesion-precio').value = s.precio;
+      document.getElementById('sesion-notas').value = s.notas||'';
+      document.getElementById('sesion-pago').value = s.pago||'pendiente';
+      document.getElementById('sesion-metodo').value = s.metodo||'';
+    }
+  } else if (clienteId) {
+    document.getElementById('sesion-cliente').value = clienteId;
+    document.getElementById('sesion-cliente-id').value = clienteId;
+    checkDescuento(clienteId);
+  }
+  openModal('modal-sesion');
+}
+
+function onSesionClienteChange() {
+  const cid = document.getElementById('sesion-cliente').value;
+  checkDescuento(cid);
+}
+function onSesionTipoChange() {
+  const tid = document.getElementById('sesion-tipo').value;
+  const tipo = DB.tipos.find(t=>t.id===tid);
+  if (tipo) document.getElementById('sesion-precio').value = tipo.precio;
+}
+
+function checkDescuento(cid) {
+  if (!cid || !DB.config.descuento_cada) return;
+  const c = DB.clientes.find(x=>x.id===cid);
+  if (!c) return;
+  const count = (c.sesiones_count||0) + 1;
+  if (count % DB.config.descuento_cada === 0) {
+    const aviso = document.getElementById('descuento-aviso');
+    aviso.style.display = 'block';
+    const nota = DB.config.descuento_nota || `¡${count}ª sesión!`;
+    aviso.innerHTML = `🎉 ${nota} — Esta es la sesión #${count}. Se aplica un ${DB.config.descuento_pct}% de descuento automáticamente.`;
+    // apply discount to price if tipo already selected
+    const tid = document.getElementById('sesion-tipo').value;
+    const tipo = DB.tipos.find(t=>t.id===tid);
+    if (tipo) {
+      const desc = +(tipo.precio * (1 - DB.config.descuento_pct/100)).toFixed(0);
+      document.getElementById('sesion-precio').value = desc;
+    }
+  }
+}
+
+async function saveSesion() {
+  const cid = document.getElementById('sesion-cliente').value;
+  const fecha = document.getElementById('sesion-fecha').value;
+  if (!cid || !fecha) { toast('Cliente y fecha son requeridos'); return; }
+  const id = document.getElementById('sesion-id').value;
+  const item = {
+    cliente_id: cid,
+    tipo_id: document.getElementById('sesion-tipo').value||null,
+    fecha, precio: +document.getElementById('sesion-precio').value||0,
+    notas: document.getElementById('sesion-notas').value,
+    pago: document.getElementById('sesion-pago').value,
+    metodo: document.getElementById('sesion-metodo').value,
+  };
+  if (id) item.id = id;
+  const saved = await dbSave('calma_sesiones', item);
+  if (id) {
+    const idx = DB.sesiones.findIndex(s=>s.id===id);
+    if (idx>=0) DB.sesiones[idx] = saved;
+  } else {
+    DB.sesiones.push(saved);
+    // Update cliente stats
+    const c = DB.clientes.find(x=>x.id===cid);
+    if (c) {
+      c.sesiones_count = (c.sesiones_count||0)+1;
+      c.ultima_sesion = fecha;
+      await dbSave('calma_clientes', c);
+    }
+  }
+  closeModal('modal-sesion');
+  closeModal('modal-ficha');
+  renderAll();
+  toast('✓ Sesión guardada');
+  if (cid) setTimeout(()=>openFicha(cid), 100);
+}
+
+async function deleteSesion(id, refClienteId) {
+  if (!confirm('¿Eliminar esta sesión?')) return;
+  const s = DB.sesiones.find(x=>x.id===id);
+  if (s) {
+    const c = DB.clientes.find(x=>x.id===s.cliente_id);
+    if (c && c.sesiones_count > 0) {
+      c.sesiones_count--;
+      await dbSave('calma_clientes', c);
+    }
+  }
+  DB.sesiones = DB.sesiones.filter(x=>x.id!==id);
+  await dbDelete('calma_sesiones', id);
+  renderAll();
+  toast('Sesión eliminada');
+  if (refClienteId) setTimeout(()=>openFicha(refClienteId), 100);
+}
+
+async function togglePago(id) {
+  const s = DB.sesiones.find(x=>x.id===id);
+  if (!s) return;
+  s.pago = s.pago==='cobrado' ? 'pendiente' : 'cobrado';
+  await dbSave('calma_sesiones', s);
+  renderAll();
+  toast(`Pago marcado como: ${s.pago}`);
+}
+
+// ─── TURNO ───
+function openTurnoModal(clienteId) {
+  document.getElementById('turno-id').value = '';
+  document.getElementById('turno-notas').value = '';
+  document.getElementById('turno-fecha').value = '';
+  document.getElementById('turno-hora').value = '';
+  document.getElementById('turno-estado').value = 'confirmado';
+  const cs = document.getElementById('turno-cliente');
+  cs.innerHTML = '<option value="">Seleccionar...</option>' +
+    DB.clientes.map(c=>`<option value="${c.id}">${c.apellido}, ${c.nombre}</option>`).join('');
+  const ts = document.getElementById('turno-tipo');
+  ts.innerHTML = '<option value="">Seleccionar...</option>' +
+    DB.tipos.map(t=>`<option value="${t.id}">${t.nombre}</option>`).join('');
+  if (clienteId) document.getElementById('turno-cliente').value = clienteId;
+  openModal('modal-turno');
+}
+
+async function saveTurno() {
+  const fecha = document.getElementById('turno-fecha').value;
+  if (!fecha) { toast('La fecha es requerida'); return; }
+  const id = document.getElementById('turno-id').value;
+  const item = {
+    cliente_id: document.getElementById('turno-cliente').value||null,
+    tipo_id: document.getElementById('turno-tipo').value||null,
+    fecha, hora: document.getElementById('turno-hora').value,
+    estado: document.getElementById('turno-estado').value,
+    notas: document.getElementById('turno-notas').value,
+  };
+  if (id) item.id = id;
+  const saved = await dbSave('calma_turnos', item);
+  if (id) { const idx=DB.turnos.findIndex(t=>t.id===id); if(idx>=0) DB.turnos[idx]=saved; }
+  else DB.turnos.push(saved);
+  closeModal('modal-turno');
+  renderAll();
+  toast('✓ Turno guardado');
+}
+
+async function deleteTurno(id) {
+  if (!confirm('¿Eliminar este turno?')) return;
+  DB.turnos = DB.turnos.filter(t=>t.id!==id);
+  await dbDelete('calma_turnos', id);
+  renderAll();
+  toast('Turno eliminado');
+}
+
+function convertirTurnoSesion(turnoId) {
+  const t = DB.turnos.find(x=>x.id===turnoId);
+  if (!t) return;
+  openSesionModal(t.cliente_id);
+  document.getElementById('sesion-fecha').value = t.fecha;
+  if (t.tipo_id) {
+    document.getElementById('sesion-tipo').value = t.tipo_id;
+    onSesionTipoChange();
+  }
+}
+
+// ─── TIPO SESIÓN ───
+function openTipoModal(id) {
+  document.getElementById('tipo-id').value = '';
+  document.getElementById('tipo-nombre').value = '';
+  document.getElementById('tipo-desc').value = '';
+  document.getElementById('tipo-precio').value = '';
+  document.getElementById('tipo-duracion').value = '';
+  if (id) {
+    const t = DB.tipos.find(x=>x.id===id);
+    if (t) {
+      document.getElementById('tipo-id').value = t.id;
+      document.getElementById('tipo-nombre').value = t.nombre||'';
+      document.getElementById('tipo-desc').value = t.descripcion||'';
+      document.getElementById('tipo-precio').value = t.precio||'';
+      document.getElementById('tipo-duracion').value = t.duracion||'';
+    }
+  }
+  openModal('modal-tipo');
+}
+
+async function saveTipo() {
+  const nombre = document.getElementById('tipo-nombre').value.trim();
+  if (!nombre) { toast('El nombre es requerido'); return; }
+  const id = document.getElementById('tipo-id').value;
+  const item = {
+    nombre,
+    descripcion: document.getElementById('tipo-desc').value,
+    precio: +document.getElementById('tipo-precio').value||0,
+    duracion: document.getElementById('tipo-duracion').value,
+  };
+  if (id) item.id = id;
+  const saved = await dbSave('calma_tipos', item);
+  if (id) { const idx=DB.tipos.findIndex(t=>t.id===id); if(idx>=0) DB.tipos[idx]=saved; }
+  else DB.tipos.push(saved);
+  closeModal('modal-tipo');
+  renderConfig();
+  toast('✓ Tipo de sesión guardado');
+}
+
+async function deleteTipo(id) {
+  if (!confirm('¿Eliminar este tipo de sesión?')) return;
+  DB.tipos = DB.tipos.filter(t=>t.id!==id);
+  await dbDelete('calma_tipos', id);
+  renderConfig();
+  toast('Tipo eliminado');
+}
+
+// ─── CONFIG DESCUENTO ───
+async function saveDescuentoConfig() {
+  const cada = +document.getElementById('desc-cada').value;
+  const pct = +document.getElementById('desc-pct').value;
+  const nota = document.getElementById('desc-nota').value;
+  if (!cada || !pct) { toast('Completá ambos campos'); return; }
+  DB.config = { descuento_cada: cada, descuento_pct: pct, descuento_nota: nota };
+  if (SB && !DEMO) {
+    await SB.from('calma_config').upsert({ key:'descuento', value:JSON.stringify(DB.config) }, { onConflict:'key' });
+  }
+  renderConfig();
+  toast('✓ Configuración de descuento guardada');
+}
+
+// ═══════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════
+function getTipoNombre(id) {
+  const t = DB.tipos.find(x=>x.id===id);
+  return t ? t.nombre : '';
+}
+function formatFecha(str) {
+  if (!str) return '';
+  const parts = str.split('T')[0].split('-');
+  if (parts.length !== 3) return str;
+  const d = new Date(+parts[0], +parts[1]-1, +parts[2]);
+  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return d.getDate().toString().padStart(2,'0') + ' ' + meses[d.getMonth()] + ' ' + d.getFullYear();
+}
+function badgePago(pago) {
+  const map = { cobrado:'badge-green', pendiente:'badge-red', parcial:'badge-orange', bonificado:'badge-stone' };
+  const label = { cobrado:'Cobrado', pendiente:'Pendiente', parcial:'Parcial', bonificado:'Bonificado' };
+  return `<span class="badge ${map[pago]||'badge-stone'}">${label[pago]||pago||'—'}</span>`;
+}
+function badgeEstadoTurno(estado) {
+  const map = { confirmado:'badge-green', pendiente:'badge-orange', cancelado:'badge-red' };
+  const label = { confirmado:'Confirmado', pendiente:'Pendiente', cancelado:'Cancelado' };
+  return `<span class="badge ${map[estado]||'badge-stone'}">${label[estado]||estado||'—'}</span>`;
+}
+
+function switchTab(el, targetId) {
+  const parent = el.closest('.modal-body, #ficha-body');
+  parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  parent.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  const target = document.getElementById(targetId);
+  if (target) target.classList.add('active');
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-btn').textContent = isDark ? '☽' : '☀';
+  localStorage.setItem('calma_theme', isDark ? 'light' : 'dark');
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  // Restore theme
+  const savedTheme = localStorage.getItem('calma_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = savedTheme === 'dark' ? '☀' : '☽';
+  const url = localStorage.getItem('calma_sb_url');
+  const key = localStorage.getItem('calma_sb_key');
+  if (url && key) {
+    const ok = await initSupabase(url, key);
+    if (ok) {
+      await ensureTables();
+      await loadAll();
+      startApp();
+    } else {
+      // show setup again
+    }
+  }
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(ov => {
+    ov.addEventListener('click', e => { if(e.target===ov) ov.classList.remove('open'); });
+  });
+});
+</script>
+</body>
+</html>
