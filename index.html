@@ -301,11 +301,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <span class="ftab" onclick="setTF('mes',this)">Este mes</span>
       <span class="ftab" onclick="setTF('pend',this)">Cobro pendiente</span>
     </div>
-    <div id="ag-ef" style="display:flex;gap:5px">
-      <span class="ftab on" onclick="setEF('todo',this)">Todo</span>
-      <span class="ftab" onclick="setEF('prog',this)">📅 Turnos</span>
-      <span class="ftab" onclick="setEF('real',this)">✦ Sesiones</span>
-    </div>
+<div id="ag-ef" style="display:none"></div>
     <div style="margin-left:auto"><button class="btn bp bsm" onclick="oAg()">+ Nueva entrada</button></div>
   </div>
   <div id="ag-lista"></div>
@@ -824,6 +820,7 @@ function aiCard(a){
       ${pInfo}
       ${isRe&&(a.pago==='pendiente'||a.pago==='parcial')?`<button class="btn bg2 bxs" onclick="event.stopPropagation();mCob('${a.id}')">Cobrar ✓</button>`:''}
       ${isPg?`<button class="btn bp bxs" onclick="event.stopPropagation();mrReal('${a.id}')">✦ Realizada</button>`:''}
+      <button class="bic ber" onclick="event.stopPropagation();dAg('${a.id}')" title="Eliminar"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
     </div>
   </div>`;
 }
