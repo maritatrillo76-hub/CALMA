@@ -216,13 +216,13 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   <div class="sb-logo"><div class="sb-logo-t">CALMA</div><div class="sb-logo-s">Terapia Holística</div></div>
   <div class="sb-nav">
     <div class="sb-gl">Principal</div>
-    <div class="ni on" data-v="dashboard" onclick="gv('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
-    <div class="ni" data-v="clientes" onclick="gv('clientes')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</div>
-    <div class="ni" data-v="agenda" onclick="gv('agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda & Sesiones</div>
+    <div class="ni on" data-v="dashboard" onclick="showV('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="ni" data-v="clientes" onclick="showV('clientes')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</div>
+    <div class="ni" data-v="agenda" onclick="showV('agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda & Sesiones</div>
     <div class="sb-gl" style="margin-top:6px">Especial</div>
-    <div class="ni sinc" data-v="sinc" onclick="gv('sinc')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="3"/><path d="M23 21v-1.5a3 3 0 0 0-2-2.83"/></svg>SINCRONIZADO</div>
+    <div class="ni sinc" data-v="sinc" onclick="showV('sinc')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><circle cx="19" cy="8" r="3"/><path d="M23 21v-1.5a3 3 0 0 0-2-2.83"/></svg>SINCRONIZADO</div>
     <div class="sb-gl" style="margin-top:6px">Sistema</div>
-    <div class="ni" data-v="config" onclick="gv('config')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configuración</div>
+    <div class="ni" data-v="config" onclick="showV('config')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configuración</div>
   </div>
   <div class="sb-ft"><span class="sb-ver">CALMA v2.0</span><button class="theme-btn" id="tbtn" onclick="toggleTheme()">☽</button></div>
 </nav>
@@ -249,7 +249,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div class="sc"><div class="sc-a" style="background:var(--err)"></div><div class="sc-i"><div class="sc-l">Pendiente cobro</div><div class="sc-v" id="sv-pd">$0</div><div class="sc-s">sin cobrar</div></div></div>
   </div>
   <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:16px">
-    <div class="card"><div class="ch"><span class="ct">Próximos turnos</span><button class="btn bg bsm" onclick="gv('agenda')">Ver agenda →</button></div><div id="d-turnos" style="padding:12px 16px"></div></div>
+    <div class="card"><div class="ch"><span class="ct">Próximos turnos</span><button class="btn bg bsm" onclick="showV('agenda')">Ver agenda →</button></div><div id="d-turnos" style="padding:12px 16px"></div></div>
     <div>
       <div class="card" style="margin-bottom:14px"><div class="ch"><span class="ct">Pendiente cobro</span></div><div id="d-pend" style="padding:12px 16px;max-height:190px;overflow-y:auto"></div></div>
       <div class="card"><div class="ch"><span class="ct">SINCRONIZADO próximo</span></div><div id="d-sinc" style="padding:12px 16px"></div></div>
@@ -602,7 +602,7 @@ async function reloadAndRender(){
 // ── VIEWS ──
 const views = ['dashboard','clientes','agenda','sinc','config'];
 const titles = {dashboard:'Dashboard',clientes:'Clientes',agenda:'Agenda & Sesiones',sinc:'SINCRONIZADO',config:'Configuración'};
-function gv(v){
+function showV(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('on'));
   document.getElementById('vw-'+v).classList.add('on');
   document.querySelectorAll('.ni').forEach(el=>el.classList.toggle('on',el.dataset.v===v));
@@ -746,13 +746,15 @@ function agItem(item){
   const cl=getCl(item.cliente_id), d=pd(item.fecha), isTu=item._k==='turno';
   const pr=isTu?'':`$${(+item.precio||0).toLocaleString('es-AR')}`;
   const pa=isTu?bEst(item.estado):bPago(item.pago);
+  const esHoy=item.fecha===hoy();
+  const hoyLabel=esHoy?' <span style="color:var(--terra);font-size:10px;font-weight:600">HOY</span>':'';
   let pInfo='';
   if(!isTu&&item.pago==='parcial') pInfo=`<div style="font-size:10px;color:var(--tl);text-align:right">Abonado: $${(+item.parcial_monto||0).toLocaleString('es-AR')} | Resta: $${(+item.parcial_resta||0).toLocaleString('es-AR')}</div>`;
   return `<div class="ai" onclick="openAg('${item.id}','${item._k}')">
     <div class="ai-dt"><div class="ai-d">${d?d.getDate():'—'}</div><div class="ai-m">${d?MESES[d.getMonth()]:''}</div></div>
     <div class="ai-b">
       <div class="ai-ti">${cl?cl.nombre+' '+cl.apellido:'—'}</div>
-      <div class="ai-su">${isTu?'🗓 Turno':'✦ Sesión'} · ${getTi(item.tipo_id)||'—'}${item.hora?' · '+item.hora:''} ${item.fecha===hoy()?' <span style="color:var(--terra);font-size:10px;font-weight:600;letter-spacing:.5px">HOY</span>':''}</div>
+      <div class="ai-su">${isTu?'🗓 Turno':'✦ Sesión'} · ${getTi(item.tipo_id)||'—'}${item.hora?' · '+item.hora:''} ${hoyLabel}</div>
       ${item.notas?`<div class="ai-no">${item.notas.slice(0,90)}${item.notas.length>90?'...':''}</div>`:''}
     </div>
     <div class="ai-r">
@@ -883,12 +885,12 @@ function fillCl(c){
   for(const [fid,key] of Object.entries(m)) sv(fid,c[key]||'');
   if(c.hijos==='si') g('row-hij').style.display='block';
 }
-function togHij(){ g('row-hij').style.display=gv('c-hij')==='si'?'block':'none'; }
+function togHij(){ g('row-hij').style.display=getV('c-hij')==='si'?'block':'none'; }
 async function saveCl(){
-  const nom=gv('c-nom').trim(), ap=gv('c-ap').trim();
+  const nom=getV('c-nom').trim(), ap=getV('c-ap').trim();
   if(!nom||!ap){toast('Nombre y apellido son requeridos');return;}
-  const id=gv('c-id');
-  const item={nombre:nom,apellido:ap,telefono:gv('c-tel'),email:gv('c-em'),fnac:gv('c-fn')||null,origen:gv('c-orig'),profesion:gv('c-prof'),civil:gv('c-civ'),hijos:gv('c-hij'),hijos_detalle:gv('c-hijD'),convive:gv('c-conv'),motivo:gv('c-mot'),actfisica:gv('c-af'),actfisica_tipo:gv('c-aft'),alimentacion:gv('c-alim'),alim_obs:gv('c-aobs'),alim_detalle:gv('c-adet'),liquidos:gv('c-liq'),liq_tipo:gv('c-liqt'),evacuacion:gv('c-ev'),evac_obs:gv('c-evO'),sueno:gv('c-sue'),sueno_cal:gv('c-sueC'),sueno_obs:gv('c-sueO'),tension:gv('c-ten'),patologias:gv('c-pat'),medicacion:gv('c-med'),emocional:gv('c-emo'),estres:gv('c-est'),terapia_otro:gv('c-ter'),notas:gv('c-not'),activo:true};
+  const id=getV('c-id');
+  const item={nombre:nom,apellido:ap,telefono:getV('c-tel'),email:getV('c-em'),fnac:getV('c-fn')||null,origen:getV('c-orig'),profesion:getV('c-prof'),civil:getV('c-civ'),hijos:getV('c-hij'),hijos_detalle:getV('c-hijD'),convive:getV('c-conv'),motivo:getV('c-mot'),actfisica:getV('c-af'),actfisica_tipo:getV('c-aft'),alimentacion:getV('c-alim'),alim_obs:getV('c-aobs'),alim_detalle:getV('c-adet'),liquidos:getV('c-liq'),liq_tipo:getV('c-liqt'),evacuacion:getV('c-ev'),evac_obs:getV('c-evO'),sueno:getV('c-sue'),sueno_cal:getV('c-sueC'),sueno_obs:getV('c-sueO'),tension:getV('c-ten'),patologias:getV('c-pat'),medicacion:getV('c-med'),emocional:getV('c-emo'),estres:getV('c-est'),terapia_otro:getV('c-ter'),notas:getV('c-not'),activo:true};
   if(id){ item.id=id; const ex=DB.clientes.find(c=>c.id===id); if(ex){item.sesiones_count=ex.sesiones_count||0;item.ultima_sesion=ex.ultima_sesion;} }
   closeMo('mo-cl'); toast('Guardando...');
   await dbSave('calma_clientes',item);
@@ -974,24 +976,24 @@ function popSel(sid,list,sortKey){
   sel.innerHTML='<option value="">Seleccionar cliente...</option>'+sorted.map(c=>`<option value="${c.id}">${c.apellido?c.apellido+', '+c.nombre:c.nombre}</option>`).join('');
 }
 function popTipos(sid){ const sel=g(sid); if(!sel) return; sel.innerHTML='<option value="">—</option>'+DB.tipos.map(t=>`<option value="${t.id}">${t.nombre} $${(+t.precio||0).toLocaleString('es-AR')}</option>`).join(''); }
-function onSCl(){ checkDesc(gv('s-cl')); }
-function onSTi(){ const t=DB.tipos.find(x=>x.id===gv('s-ti')); if(t){sv('s-pr',t.precio);} const cid=gv('s-cl'); if(cid) checkDesc(cid); }
-function checkDesc(cid){ if(!cid||!DB.cfg.desc?.descuento_cada) return; const c=DB.clientes.find(x=>x.id===cid); if(!c) return; const next=(c.sesiones_count||0)+1; const av=g('desc-av'); if(next%DB.cfg.desc.descuento_cada===0){av.style.display='block';av.innerHTML=`🎉 ${DB.cfg.desc.descuento_nota||'¡Sesión especial!'} — Sesión #${next}. Descuento: ${DB.cfg.desc.descuento_pct}%`;const t=DB.tipos.find(x=>x.id===gv('s-ti'));if(t)sv('s-pr',Math.round(+t.precio*(1-DB.cfg.desc.descuento_pct/100)));}else av.style.display='none'; }
-function togPP(){ g('pp-box').style.display=gv('s-pa')==='parcial'?'block':'none'; if(gv('s-pa')==='parcial') calcResto(); }
-function calcResto(){ sv('s-pr2',Math.max(0,(+gv('s-pr')||0)-(+gv('s-pm')||0))); }
+function onSCl(){ checkDesc(getV('s-cl')); }
+function onSTi(){ const t=DB.tipos.find(x=>x.id===getV('s-ti')); if(t){sv('s-pr',t.precio);} const cid=getV('s-cl'); if(cid) checkDesc(cid); }
+function checkDesc(cid){ if(!cid||!DB.cfg.desc?.descuento_cada) return; const c=DB.clientes.find(x=>x.id===cid); if(!c) return; const next=(c.sesiones_count||0)+1; const av=g('desc-av'); if(next%DB.cfg.desc.descuento_cada===0){av.style.display='block';av.innerHTML=`🎉 ${DB.cfg.desc.descuento_nota||'¡Sesión especial!'} — Sesión #${next}. Descuento: ${DB.cfg.desc.descuento_pct}%`;const t=DB.tipos.find(x=>x.id===getV('s-ti'));if(t)sv('s-pr',Math.round(+t.precio*(1-DB.cfg.desc.descuento_pct/100)));}else av.style.display='none'; }
+function togPP(){ g('pp-box').style.display=getV('s-pa')==='parcial'?'block':'none'; if(getV('s-pa')==='parcial') calcResto(); }
+function calcResto(){ sv('s-pr2',Math.max(0,(+getV('s-pr')||0)-(+getV('s-pm')||0))); }
 async function saveAg(){
-  const kind=gv('ag-kind')||'sesion', id=gv('ag-id');
+  const kind=getV('ag-kind')||'sesion', id=getV('ag-id');
   if(kind==='turno'){
-    const fe=gv('t-fe'); if(!fe){toast('La fecha es requerida');return;}
-    const item={cliente_id:gv('t-cl')||null,tipo_id:gv('t-ti')||null,fecha:fe,hora:gv('t-ho')||null,estado:gv('t-es'),notas:gv('t-no')};
+    const fe=getV('t-fe'); if(!fe){toast('La fecha es requerida');return;}
+    const item={cliente_id:getV('t-cl')||null,tipo_id:getV('t-ti')||null,fecha:fe,hora:getV('t-ho')||null,estado:getV('t-es'),notas:getV('t-no')};
     if(id) item.id=id;
     closeMo('mo-ag'); toast('Guardando...');
     await dbSave('calma_turnos',item);
   } else {
-    const cid=gv('s-cl'), fe=gv('s-fe'); if(!cid||!fe){toast('Cliente y fecha son requeridos');return;}
-    const pago=gv('s-pa');
-    const item={cliente_id:cid,tipo_id:gv('s-ti')||null,fecha:fe,precio:+gv('s-pr')||0,notas:gv('s-no'),pago,metodo:gv('s-me')||''};
-    if(pago==='parcial'){item.parcial_monto=+gv('s-pm')||0;item.parcial_resta=+gv('s-pr2')||0;item.parcial_nota=gv('s-pn')||'';}
+    const cid=getV('s-cl'), fe=getV('s-fe'); if(!cid||!fe){toast('Cliente y fecha son requeridos');return;}
+    const pago=getV('s-pa');
+    const item={cliente_id:cid,tipo_id:getV('s-ti')||null,fecha:fe,precio:+getV('s-pr')||0,notas:getV('s-no'),pago,metodo:getV('s-me')||''};
+    if(pago==='parcial'){item.parcial_monto=+getV('s-pm')||0;item.parcial_resta=+getV('s-pr2')||0;item.parcial_nota=getV('s-pn')||'';}
     if(id) item.id=id;
     closeMo('mo-ag'); toast('Guardando...');
     const saved=await dbSave('calma_sesiones',item);
@@ -1013,14 +1015,14 @@ function convTurno(id){ const t=DB.turnos.find(x=>x.id===id); if(!t)return; open
 //  TIPOS
 // ════════════════════════
 function openTipo(id){ ['ti-id','ti-n','ti-d','ti-p','ti-du'].forEach(f=>sv(f,'')); if(id){const t=DB.tipos.find(x=>x.id===id);if(t){sv('ti-id',t.id);sv('ti-n',t.nombre);sv('ti-d',t.descripcion||'');sv('ti-p',t.precio);sv('ti-du',t.duracion||'');}} openMo('mo-tipo'); }
-async function saveTipo(){ const n=gv('ti-n').trim(); if(!n){toast('Nombre requerido');return;} const id=gv('ti-id'); const item={nombre:n,descripcion:gv('ti-d'),precio:+gv('ti-p')||0,duracion:gv('ti-du')}; if(id)item.id=id; closeMo('mo-tipo'); toast('Guardando...'); await dbSave('calma_tipos',item); await reloadAndRender(); toast('✓ Tipo guardado'); }
+async function saveTipo(){ const n=getV('ti-n').trim(); if(!n){toast('Nombre requerido');return;} const id=getV('ti-id'); const item={nombre:n,descripcion:getV('ti-d'),precio:+getV('ti-p')||0,duracion:getV('ti-du')}; if(id)item.id=id; closeMo('mo-tipo'); toast('Guardando...'); await dbSave('calma_tipos',item); await reloadAndRender(); toast('✓ Tipo guardado'); }
 async function delTipo(id){ if(!confirm('¿Eliminar tipo de sesión?'))return; await dbDel('calma_tipos',id); await reloadAndRender(); toast('Eliminado'); }
 
 // ════════════════════════
 //  COLEGAS
 // ════════════════════════
 function openCol(id){ ['col-id','col-n','col-a','col-t','col-e','col-es','col-no'].forEach(f=>sv(f,'')); if(id){const c=DB.colegas.find(x=>x.id===id);if(c){sv('col-id',c.id);sv('col-n',c.nombre);sv('col-a',c.apellido||'');sv('col-t',c.tel||'');sv('col-e',c.email||'');sv('col-es',c.especialidad||'');sv('col-no',c.notas||'');}} openMo('mo-col'); }
-async function saveCol(){ const n=gv('col-n').trim(); if(!n){toast('Nombre requerido');return;} const id=gv('col-id'); const item={nombre:n,apellido:gv('col-a'),tel:gv('col-t'),email:gv('col-e'),especialidad:gv('col-es'),notas:gv('col-no')}; if(id)item.id=id; closeMo('mo-col'); toast('Guardando...'); await dbSave('calma_colegas',item); await reloadAndRender(); toast('✓ Colega guardada'); }
+async function saveCol(){ const n=getV('col-n').trim(); if(!n){toast('Nombre requerido');return;} const id=getV('col-id'); const item={nombre:n,apellido:getV('col-a'),tel:getV('col-t'),email:getV('col-e'),especialidad:getV('col-es'),notas:getV('col-no')}; if(id)item.id=id; closeMo('mo-col'); toast('Guardando...'); await dbSave('calma_colegas',item); await reloadAndRender(); toast('✓ Colega guardada'); }
 
 // ════════════════════════
 //  SINC SESION
@@ -1031,17 +1033,17 @@ function openSincSes(id){ ['ss-id','ss-no','ss-pm','ss-pr2'].forEach(f=>sv(f,'')
   popTipos('ss-ti');
   if(id){const s=DB.sinc.find(x=>x.id===id);if(s){sv('ss-id',s.id);sv('ss-cl',s.cliente_id);sv('ss-co',s.colega_id||'');sv('ss-fe',s.fecha);sv('ss-ho',s.hora||'');sv('ss-ti',s.tipo_id||'');sv('ss-pr',s.precio);sv('ss-pct',s.pct_yo||50);sv('ss-py',s.pago_yo);sv('ss-pc',s.pago_col);sv('ss-no',s.notas||'');calcSDiv();if(s.pago_yo==='parcial'){g('ss-pb').style.display='block';sv('ss-pm',s.parcial_monto||0);sv('ss-pr2',s.parcial_resta||0);}}}
   openMo('mo-sinc'); }
-function onSSTi(){ const t=DB.tipos.find(x=>x.id===gv('ss-ti')); if(t){sv('ss-pr',t.precio);calcSDiv();} }
-function calcSDiv(){ const pr=+gv('ss-pr')||0, pct=+gv('ss-pct')||50; const mio=Math.round(pr*pct/100); sv('ss-div',`$${mio.toLocaleString('es-AR')} / $${(pr-mio).toLocaleString('es-AR')}`); }
-function togSP(){ g('ss-pb').style.display=gv('ss-py')==='parcial'?'block':'none'; }
-function calcSR(){ const mio=Math.round((+gv('ss-pr')||0)*(+gv('ss-pct')||50)/100); sv('ss-pr2',Math.max(0,mio-(+gv('ss-pm')||0))); }
-async function saveSinc(){ const cid=gv('ss-cl'),fe=gv('ss-fe'); if(!cid||!fe){toast('Cliente y fecha requeridos');return;} const id=gv('ss-id'); const item={cliente_id:cid,colega_id:gv('ss-co')||null,tipo_id:gv('ss-ti')||null,fecha:fe,hora:gv('ss-ho')||null,precio:+gv('ss-pr')||0,pct_yo:+gv('ss-pct')||50,pago_yo:gv('ss-py'),pago_col:gv('ss-pc'),notas:gv('ss-no')}; if(gv('ss-py')==='parcial'){item.parcial_monto=+gv('ss-pm')||0;item.parcial_resta=+gv('ss-pr2')||0;} if(id)item.id=id; closeMo('mo-sinc'); toast('Guardando...'); await dbSave('calma_sinc',item); await reloadAndRender(); toast('✓ Sesión SINC guardada'); }
+function onSSTi(){ const t=DB.tipos.find(x=>x.id===getV('ss-ti')); if(t){sv('ss-pr',t.precio);calcSDiv();} }
+function calcSDiv(){ const pr=+getV('ss-pr')||0, pct=+getV('ss-pct')||50; const mio=Math.round(pr*pct/100); sv('ss-div',`$${mio.toLocaleString('es-AR')} / $${(pr-mio).toLocaleString('es-AR')}`); }
+function togSP(){ g('ss-pb').style.display=getV('ss-py')==='parcial'?'block':'none'; }
+function calcSR(){ const mio=Math.round((+getV('ss-pr')||0)*(+getV('ss-pct')||50)/100); sv('ss-pr2',Math.max(0,mio-(+getV('ss-pm')||0))); }
+async function saveSinc(){ const cid=getV('ss-cl'),fe=getV('ss-fe'); if(!cid||!fe){toast('Cliente y fecha requeridos');return;} const id=getV('ss-id'); const item={cliente_id:cid,colega_id:getV('ss-co')||null,tipo_id:getV('ss-ti')||null,fecha:fe,hora:getV('ss-ho')||null,precio:+getV('ss-pr')||0,pct_yo:+getV('ss-pct')||50,pago_yo:getV('ss-py'),pago_col:getV('ss-pc'),notas:getV('ss-no')}; if(getV('ss-py')==='parcial'){item.parcial_monto=+getV('ss-pm')||0;item.parcial_resta=+getV('ss-pr2')||0;} if(id)item.id=id; closeMo('mo-sinc'); toast('Guardando...'); await dbSave('calma_sinc',item); await reloadAndRender(); toast('✓ Sesión SINC guardada'); }
 
 // ════════════════════════
 //  CONFIG
 // ════════════════════════
-async function saveDesc(){ const cada=+gv('dc-cada'),pct=+gv('dc-pct'); if(!cada||!pct){toast('Completá ambos campos');return;} DB.cfg.desc={descuento_cada:cada,descuento_pct:pct,descuento_nota:gv('dc-nota')}; await dbCfg('desc',DB.cfg.desc); await reloadAndRender(); toast('✓ Descuento configurado'); }
-async function saveOpts(){ const orig=gv('co-orig').split('\n').map(s=>s.trim()).filter(Boolean),act=gv('co-act').split('\n').map(s=>s.trim()).filter(Boolean); DB.cfg.opts={orig,act}; await dbCfg('opts',DB.cfg.opts); addCustomOpts(); toast('✓ Opciones guardadas'); }
+async function saveDesc(){ const cada=+getV('dc-cada'),pct=+getV('dc-pct'); if(!cada||!pct){toast('Completá ambos campos');return;} DB.cfg.desc={descuento_cada:cada,descuento_pct:pct,descuento_nota:getV('dc-nota')}; await dbCfg('desc',DB.cfg.desc); await reloadAndRender(); toast('✓ Descuento configurado'); }
+async function saveOpts(){ const orig=getV('co-orig').split('\n').map(s=>s.trim()).filter(Boolean),act=getV('co-act').split('\n').map(s=>s.trim()).filter(Boolean); DB.cfg.opts={orig,act}; await dbCfg('opts',DB.cfg.opts); addCustomOpts(); toast('✓ Opciones guardadas'); }
 
 // ════════════════════════
 //  DARK MODE
@@ -1052,7 +1054,7 @@ function toggleTheme(){ const dk=document.documentElement.getAttribute('data-the
 //  HELPERS
 // ════════════════════════
 function g(id){ return document.getElementById(id); }
-function gv(id){ const el=g(id); return el?el.value:''; }
+function getV(id){ const el=g(id); return el?el.value:''; }
 function sv(id,val){ const el=g(id); if(el&&val!=null) el.value=val; }
 function openMo(id){ g(id).classList.add('op'); }
 function closeMo(id){ g(id).classList.remove('op'); }
@@ -1087,7 +1089,7 @@ window.addEventListener('DOMContentLoaded', async()=>{
   // Keyboard shortcuts
   document.addEventListener('keydown', e=>{
     if(e.key==='Escape') document.querySelectorAll('.mo.op').forEach(m=>m.classList.remove('op'));
-    if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();gv('cl-q')!==undefined&&document.getElementById('cl-q')?.focus();}
+    if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();getV('cl-q')!==undefined&&document.getElementById('cl-q')?.focus();}
   });
 });
 </script>
