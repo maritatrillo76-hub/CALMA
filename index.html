@@ -217,6 +217,213 @@ select.fc{cursor:pointer}
 #toast.er{background:var(--er)}
 input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+
+/* ═══════════════════════════════
+   MOBILE — breakpoint 768px
+═══════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── SIDEBAR → bottom nav ── */
+  #nav {
+    width: 100%;
+    height: auto;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    z-index: 200;
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding: 0;
+  }
+  .nl, .ng, .nver, .tbtn, .nf { display: none !important; }
+  .ns {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: visible;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .ns::-webkit-scrollbar { display: none; }
+  .ni {
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 10px;
+    font-size: 9px;
+    letter-spacing: 0;
+    border-left: none;
+    border-top: 2px solid transparent;
+    flex: 1;
+    min-width: 52px;
+    text-align: center;
+  }
+  .ni.on {
+    border-left: none;
+    border-top-color: var(--t);
+    background: rgba(196,120,90,.1);
+  }
+  .ni.si-nav.on { border-top-color: var(--si); }
+  .ni svg { width: 18px; height: 18px; }
+
+  /* ── MAIN layout ── */
+  #main { margin-left: 0; padding-bottom: 70px; }
+
+  /* ── TOPBAR ── */
+  #top {
+    padding: 0 14px;
+    height: 50px;
+  }
+  .pt { font-size: 17px; }
+  #tact .btn { padding: 5px 10px; font-size: 11px; }
+
+  /* ── CONTENT ── */
+  #cnt { padding: 14px 12px; }
+
+  /* ── GRIDS → single column ── */
+  .g2, .g3, .g4, .g14, .g17 {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* ── STATS ── */
+  .g4 { grid-template-columns: 1fr 1fr !important; }
+  .sc { padding: 12px 14px; }
+  .sv { font-size: 24px; }
+  .sl3 { font-size: 9px; }
+
+  /* ── CARDS ── */
+  .ch { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+  .ct { font-size: 15px; }
+
+  /* ── AGENDA items ── */
+  .ai { padding: 10px 11px; gap: 8px; }
+  .ai-dt { min-width: 36px; }
+  .ai-d { font-size: 18px; }
+  .ai-ti { font-size: 12.5px; }
+  .ai-su { font-size: 10.5px; }
+  .ai-no { font-size: 11px; }
+  .ai-pr { font-size: 12.5px; }
+  .ai-r { gap: 3px; }
+
+  /* ── TABLES → card list ── */
+  table, thead, tbody, tr, th, td { display: block; width: 100%; }
+  thead { display: none; }
+  tbody tr {
+    background: var(--su);
+    border: 1px solid var(--br);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 11px 13px;
+    cursor: pointer;
+    position: relative;
+  }
+  tbody tr:hover { background: var(--bg); }
+  tbody td {
+    padding: 2px 0;
+    font-size: 12.5px;
+    border: none;
+  }
+  /* Show label before each cell */
+  tbody td:nth-child(1) { font-weight: 500; font-size: 13.5px; color: var(--dk); padding-bottom: 4px; }
+  tbody td:nth-child(2)::before { content: '📞 '; color: var(--dl); font-size: 11px; }
+  tbody td:nth-child(3)::before { content: '💼 '; color: var(--dl); font-size: 11px; }
+  tbody td:nth-child(4) { display: inline-block; margin-right: 6px; }
+  tbody td:nth-child(4)::before { content: '✦ '; color: var(--t); font-size: 11px; }
+  tbody td:nth-child(5) { display: inline-block; }
+  tbody td:nth-child(5)::before { content: '📅 '; color: var(--dl); font-size: 11px; }
+  tbody td:nth-child(6) { position: absolute; top: 11px; right: 44px; }
+  tbody td:nth-child(7) {
+    position: absolute; top: 8px; right: 8px;
+    display: flex; gap: 4px; flex-direction: column;
+    width: auto;
+  }
+  tbody td:nth-child(7) .bic { padding: 5px; }
+
+  /* ── MODALS ── */
+  .mo { padding: 0; align-items: flex-end; }
+  .md {
+    max-width: 100% !important;
+    max-height: 92vh;
+    border-radius: 16px 16px 0 0;
+    animation: slideUp .25s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .mh { padding: 14px 16px 12px; }
+  .mt2 { font-size: 18px; }
+  .mb { padding: 14px 16px; }
+  .mf { padding: 10px 16px 20px; }
+
+  /* ── FORM grids → 1 col ── */
+  .fg.f2, .fg.f3 { grid-template-columns: 1fr !important; gap: 10px; }
+
+  /* ── TABS → scrollable ── */
+  .tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { padding: 8px 12px; font-size: 9.5px; flex-shrink: 0; }
+
+  /* ── FTABS → wrap ── */
+  .ftab { font-size: 10.5px; padding: 4px 10px; }
+
+  /* ── AGENDA toolbar ── */
+  #vw-ag > div:first-child { gap: 7px; }
+  #ag-tf { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+  #ag-tf::-webkit-scrollbar { display: none; }
+  #ag-tf .ftab { flex-shrink: 0; }
+
+  /* ── WEEK CALENDAR ── */
+  .cal-grid { grid-template-columns: repeat(7,1fr); gap: 3px; }
+  .dc { min-height: 56px; padding: 4px 3px; }
+  .dc-h { font-size: 8px; }
+  .dc-n { font-size: 14px; margin-bottom: 2px; }
+  .cc { font-size: 8px; padding: 1px 3px; }
+
+  /* ── MONTH CALENDAR ── */
+  .mc-g { gap: 3px; }
+  .mc-d { min-height: 44px; padding: 3px 4px; }
+  .mc-dn { font-size: 10px; }
+
+  /* ── FICHA header ── */
+  .fih { flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
+  .fih-s { margin-left: 0; width: 100%; justify-content: space-around; }
+  .fih-i h2 { font-size: 18px; }
+
+  /* ── SINC grid ── */
+  #vw-sinc > div:last-child { grid-template-columns: 1fr !important; }
+
+  /* ── BDAY grid ── */
+  #vw-bday .g2 { grid-template-columns: 1fr !important; }
+
+  /* ── CONFIG ── */
+  #vw-cfg .g2 { grid-template-columns: 1fr !important; }
+
+  /* ── DASHBOARD ── */
+  #d-alrts .card > div:last-child { max-height: 180px; }
+
+  /* ── TOPBAR action slot ── */
+  .tr { gap: 6px; }
+  #tact { display: flex; gap: 5px; }
+
+  /* ── TOAST ── */
+  #toast { bottom: 78px; right: 12px; left: 12px; text-align: center; }
+
+  /* ── SEARCH BOX ── */
+  .sbx input { width: 120px; }
+}
+
+/* Extra small phones */
+@media (max-width: 380px) {
+  .g4 { grid-template-columns: 1fr 1fr !important; }
+  .sv { font-size: 20px; }
+  .ni { min-width: 44px; font-size: 8px; padding: 7px 6px; }
+  #cnt { padding: 12px 10px; }
+}
 </style>
 </head>
 <body>
@@ -272,13 +479,13 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <!-- ██ CLIENTES ██ -->
 <div class="view" id="vw-clt">
   <div class="card">
-    <div class="ch">
-      <div class="sbx"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--st)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Buscar..." id="cl-q" oninput="rCl()"></div>
-      <div style="display:flex;gap:7px;align-items:center">
+    <div class="ch" style="flex-wrap:wrap;gap:8px">
+      <div class="sbx" style="flex:1;min-width:140px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--st)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Buscar..." id="cl-q" oninput="rCl()" style="width:100%"></div>
+      <div style="display:flex;gap:7px;align-items:center;flex-shrink:0">
         <select class="fc" style="width:auto;font-size:11.5px;padding:5px 9px" id="cl-sort" onchange="rCl()">
           <option value="ap">A-Z</option><option value="fe">Última sesión</option><option value="se">Más sesiones</option>
         </select>
-        <button class="btn bp" onclick="oCl()">+ Nuevo cliente</button>
+        <button class="btn bp bsm" onclick="oCl()">+ Nuevo</button>
       </div>
     </div>
     <table><thead><tr><th>Cliente</th><th>Teléfono</th><th>Profesión</th><th>Sesiones</th><th>Última visita</th><th>Estado</th><th></th></tr></thead>
