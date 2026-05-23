@@ -581,8 +581,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         <div style="margin-bottom:10px"><label class="lbl">Actividad física — extras</label><textarea class="fc" id="co-af" rows="3" placeholder="ej: Tai Chi&#10;Surf"></textarea></div>
         <button class="btn bp bsm" onclick="saveOpts()">Guardar opciones</button>
       </div>
-      <div class="scard"><h3>Base de datos</h3><div id="cfg-db" style="margin-bottom:10px"></div>
-        <button class="btn bg2 bsm" onclick="showSQL()">Ver SQL de instalación</button>
+      <div class="scard"><h3>Base de datos</h3>
+        <div id="cfg-db" style="margin-bottom:12px"></div>
+        <div style="margin-bottom:10px">
+          <button class="btn bp bsm" onclick="showSQL()" style="width:100%;justify-content:center">
+            📋 Ver & copiar SQL de instalación
+          </button>
+        </div>
+        <p style="font-size:11px;color:var(--dl);line-height:1.6">Ejecutá el SQL en <strong>Supabase → SQL Editor</strong> una sola vez. Incluye CREATE TABLE, ALTER TABLE y políticas. Es seguro ejecutarlo múltiples veces.</p>
       </div>
     </div>
   </div>
@@ -740,24 +746,92 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <script>
 const SB_URL='https://teddixtgvyjxirjbikbp.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlZGRpeHRndnlqeGlyamJpa2JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NjI0MDksImV4cCI6MjA5NTAzODQwOX0.y8adnD25CP0tEhbYajH7rQglj5zoWgt5P7hbLPPMTO8';
-const SQL=`create table if not exists calma_tipos(id uuid primary key default gen_random_uuid(),nombre text not null,descripcion text,precio numeric default 0,duracion text,created_at timestamptz default now());
-create table if not exists calma_clientes(id uuid primary key default gen_random_uuid(),nombre text not null,apellido text not null,telefono text,email text,fnac date,origen text,profesion text,civil text,hijos text,hijos_detalle text,convive text,motivo text,actfisica text,actfisica_tipo text,alimentacion text,alim_obs text,alim_detalle text,liquidos text,liq_tipo text,evacuacion text,evac_obs text,sueno text,sueno_cal text,sueno_obs text,tension text,patologias text,medicacion text,emocional text,estres text,terapia_otro text,notas text,prakriti text,prakriti_dosha text,prakriti_int text,vikriti text,vikriti_dosha text,vikriti_int text,activo boolean default true,sesiones_count integer default 0,ultima_sesion date,created_at timestamptz default now());
-create table if not exists calma_agenda(id uuid primary key default gen_random_uuid(),cliente_id uuid references calma_clientes(id) on delete set null,tipo_id uuid references calma_tipos(id) on delete set null,fecha date not null,hora text,estado text default 'programado',notas text,precio numeric,pago text,metodo text,parcial_monto numeric,parcial_resta numeric,parcial_nota text,created_at timestamptz default now());
-create table if not exists calma_colegas(id uuid primary key default gen_random_uuid(),nombre text not null,apellido text,tel text,email text,especialidad text,notas text,created_at timestamptz default now());
-create table if not exists calma_sinc(id uuid primary key default gen_random_uuid(),cliente_id uuid references calma_clientes(id) on delete set null,colega_id uuid references calma_colegas(id) on delete set null,tipo_id uuid references calma_tipos(id) on delete set null,fecha date not null,hora text,precio numeric default 0,pct_yo numeric default 50,pago_yo text default 'pendiente',pago_col text default 'pendiente',parcial_monto numeric,parcial_resta numeric,notas text,created_at timestamptz default now());
-create table if not exists calma_config(key text primary key,value text);
+const SQL=`-- CALMA v3 · Ejecutar completo en Supabase SQL Editor
+-- Crea tablas, agrega columnas faltantes y configura políticas
+
+create table if not exists calma_tipos(
+  id uuid primary key default gen_random_uuid(),
+  nombre text not null, descripcion text, precio numeric default 0,
+  duracion text, created_at timestamptz default now()
+);
+create table if not exists calma_clientes(
+  id uuid primary key default gen_random_uuid(),
+  nombre text not null, apellido text not null,
+  telefono text, email text, fnac date, origen text, profesion text,
+  civil text, hijos text, hijos_detalle text, convive text, motivo text,
+  actfisica text, actfisica_tipo text, alimentacion text, alim_obs text,
+  alim_detalle text, liquidos text, liq_tipo text, evacuacion text,
+  evac_obs text, sueno text, sueno_cal text, sueno_obs text, tension text,
+  patologias text, medicacion text, emocional text, estres text,
+  terapia_otro text, notas text,
+  prakriti text, prakriti_dosha text, prakriti_int text,
+  vikriti text, vikriti_dosha text, vikriti_int text,
+  activo boolean default true, sesiones_count integer default 0,
+  ultima_sesion date, created_at timestamptz default now()
+);
+create table if not exists calma_agenda(
+  id uuid primary key default gen_random_uuid(),
+  cliente_id uuid references calma_clientes(id) on delete set null,
+  tipo_id uuid references calma_tipos(id) on delete set null,
+  fecha date not null, hora text, estado text default 'programado',
+  notas text, precio numeric, pago text, metodo text,
+  parcial_monto numeric, parcial_resta numeric, parcial_nota text,
+  created_at timestamptz default now()
+);
+create table if not exists calma_colegas(
+  id uuid primary key default gen_random_uuid(),
+  nombre text not null, apellido text, tel text, email text,
+  especialidad text, notas text, created_at timestamptz default now()
+);
+create table if not exists calma_sinc(
+  id uuid primary key default gen_random_uuid(),
+  cliente_id uuid references calma_clientes(id) on delete set null,
+  colega_id uuid references calma_colegas(id) on delete set null,
+  tipo_id uuid references calma_tipos(id) on delete set null,
+  fecha date not null, hora text, precio numeric default 0,
+  pct_yo numeric default 50, pago_yo text default 'pendiente',
+  pago_col text default 'pendiente', parcial_monto numeric,
+  parcial_resta numeric, notas text, created_at timestamptz default now()
+);
+create table if not exists calma_config(key text primary key, value text);
+
+-- Agregar columnas nuevas a tablas existentes (seguro, no rompe nada)
+alter table calma_clientes add column if not exists prakriti text;
+alter table calma_clientes add column if not exists prakriti_dosha text;
+alter table calma_clientes add column if not exists prakriti_int text;
+alter table calma_clientes add column if not exists vikriti text;
+alter table calma_clientes add column if not exists vikriti_dosha text;
+alter table calma_clientes add column if not exists vikriti_int text;
+
+-- Habilitar Row Level Security
 alter table calma_tipos enable row level security;
 alter table calma_clientes enable row level security;
 alter table calma_agenda enable row level security;
 alter table calma_colegas enable row level security;
 alter table calma_sinc enable row level security;
 alter table calma_config enable row level security;
-create policy if not exists "all" on calma_tipos for all using(true) with check(true);
-create policy if not exists "all" on calma_clientes for all using(true) with check(true);
-create policy if not exists "all" on calma_agenda for all using(true) with check(true);
-create policy if not exists "all" on calma_colegas for all using(true) with check(true);
-create policy if not exists "all" on calma_sinc for all using(true) with check(true);
-create policy if not exists "all" on calma_config for all using(true) with check(true);`;
+
+-- Crear políticas (solo si no existen)
+do $$ begin
+  if not exists(select 1 from pg_policies where tablename='calma_tipos' and policyname='calma_all') then
+    create policy "calma_all" on calma_tipos for all using(true) with check(true);
+  end if;
+  if not exists(select 1 from pg_policies where tablename='calma_clientes' and policyname='calma_all') then
+    create policy "calma_all" on calma_clientes for all using(true) with check(true);
+  end if;
+  if not exists(select 1 from pg_policies where tablename='calma_agenda' and policyname='calma_all') then
+    create policy "calma_all" on calma_agenda for all using(true) with check(true);
+  end if;
+  if not exists(select 1 from pg_policies where tablename='calma_colegas' and policyname='calma_all') then
+    create policy "calma_all" on calma_colegas for all using(true) with check(true);
+  end if;
+  if not exists(select 1 from pg_policies where tablename='calma_sinc' and policyname='calma_all') then
+    create policy "calma_all" on calma_sinc for all using(true) with check(true);
+  end if;
+  if not exists(select 1 from pg_policies where tablename='calma_config' and policyname='calma_all') then
+    create policy "calma_all" on calma_config for all using(true) with check(true);
+  end if;
+end $$;`;
 
 let SB=null;
 let DB={clientes:[],agenda:[],tipos:[],colegas:[],sinc:[],cfg:{desc:null,opts:{or:[],af:[]}}};
@@ -823,22 +897,48 @@ async function initSB(){
 
 async function loadAll(){
   if(!SB)return;
-  async function safe(fn){try{return await fn();}catch(e){return{data:null};}}
+  // Wrapper que devuelve {data, error} sin tirar excepción
+  async function q(fn){try{return await fn();}catch(e){return{data:null,error:e};}}
   const[cl,ag,ti,co,si,cf]=await Promise.all([
-    safe(()=>SB.from('calma_clientes').select('*').order('apellido')),
-    safe(()=>SB.from('calma_agenda').select('*').order('fecha',{ascending:false})),
-    safe(()=>SB.from('calma_tipos').select('*').order('nombre')),
-    safe(()=>SB.from('calma_colegas').select('*').order('nombre')),
-    safe(()=>SB.from('calma_sinc').select('*').order('fecha',{ascending:false})),
-    safe(()=>SB.from('calma_config').select('*'))
+    q(()=>SB.from('calma_clientes').select('*').order('apellido')),
+    q(()=>SB.from('calma_agenda').select('*').order('fecha',{ascending:false})),
+    q(()=>SB.from('calma_tipos').select('*').order('nombre')),
+    q(()=>SB.from('calma_colegas').select('*').order('nombre')),
+    q(()=>SB.from('calma_sinc').select('*').order('fecha',{ascending:false})),
+    q(()=>SB.from('calma_config').select('*'))
   ]);
-  if(cl.error&&cl.error.code==='42P01'){toast('⚠ Tablas no encontradas. Ir a Configuración → Ver SQL para crearlas.',true);return;}
+  // Detectar tablas faltantes
+  if(cl.error){
+    const code=cl.error.code||'';
+    if(code==='42P01'||cl.error.message?.includes('does not exist')){
+      mostrarAlertaSQL('Las tablas no existen todavía.');
+    } else {
+      toast('Error cargando datos: '+cl.error.message,true);
+    }
+    return;
+  }
+  // Detectar columnas faltantes (ej: prakriti)
+  if(ag.error&&ag.error.message?.includes('column')){
+    mostrarAlertaSQL('Hay columnas nuevas para agregar.');
+  }
   if(cl.data)DB.clientes=cl.data;
   if(ag.data)DB.agenda=ag.data;
   if(ti.data)DB.tipos=ti.data;
   if(co.data)DB.colegas=co.data;
   if(si.data)DB.sinc=si.data;
   if(cf.data)cf.data.forEach(r=>{try{if(r.key==='desc')DB.cfg.desc=JSON.parse(r.value);if(r.key==='opts')DB.cfg.opts=JSON.parse(r.value);}catch(e){}});
+}
+
+function mostrarAlertaSQL(motivo){
+  toast('⚠ '+motivo+' Ir a Configuración → Ver SQL.',true);
+  // Mostrar banner prominente en config
+  const banner=`<div style="background:rgba(196,106,106,.12);border:1px solid rgba(196,106,106,.35);border-radius:8px;padding:12px 16px;margin-bottom:12px">
+    <div style="font-weight:500;color:var(--er);margin-bottom:4px">⚠ Estructura de base de datos incompleta</div>
+    <div style="font-size:12px;color:var(--dm);margin-bottom:8px">${motivo} Ejecutá el SQL para solucionarlo.</div>
+    <button class="btn bp bsm" onclick="showSQL()">Ver SQL de instalación →</button>
+  </div>`;
+  const cfgDb=el('cfg-db');
+  if(cfgDb)cfgDb.innerHTML=banner+'<span class="b bg-r">Requiere acción</span>';
 }
 
 async function dbSave(tbl,raw){
@@ -851,7 +951,15 @@ async function dbSave(tbl,raw){
     else{({data,error}=await SB.from(tbl).insert(item).select().single());}
     if(error)throw error;
     return{ok:true,data};
-  }catch(e){toast('Error al guardar: '+String(e.message||e).slice(0,80),true);return{ok:false,data:raw};}
+  }catch(e){
+    const msg=String(e.message||e);
+    if(msg.includes('column')&&(msg.includes('schema cache')||msg.includes('Could not find'))){
+      mostrarAlertaSQL('Columna faltante en la base de datos. Ejecutá el SQL actualizado para agregarla.');
+    } else {
+      toast('Error al guardar: '+msg.slice(0,100),true);
+    }
+    return{ok:false,data:raw};
+  }
 }
 async function dbDel(tbl,id){if(!SB)return;const{error}=await SB.from(tbl).delete().eq('id',id);if(error)toast('Error al eliminar',true);}
 async function dbCfg(key,val){if(SB)await SB.from('calma_config').upsert({key,value:JSON.stringify(val)},{onConflict:'key'});}
@@ -1336,7 +1444,18 @@ async function saveSS(){const fecha=gv('ss-fe');if(!fecha){toast('Fecha requerid
 // CONFIG
 async function saveDesc(){const cada=+gv('dc-c'),pct=+gv('dc-p');if(!cada||!pct){toast('Completá ambos campos',true);return;}DB.cfg.desc={descuento_cada:cada,descuento_pct:pct,descuento_nota:gv('dc-n')};await dbCfg('desc',DB.cfg.desc);rCfg();toast('✓ Descuento configurado');}
 async function saveOpts(){const or=gv('co-or').split('\n').map(s=>s.trim()).filter(Boolean),af=gv('co-af').split('\n').map(s=>s.trim()).filter(Boolean);DB.cfg.opts={or,af};await dbCfg('opts',DB.cfg.opts);updOpts();toast('✓ Opciones guardadas');}
-function showSQL(){el('sql-txt').textContent=SQL;oMo('mo-sql');}
+function showSQL(){
+  el('sql-txt').textContent=SQL;
+  oMo('mo-sql');
+  // Auto-select all text for easy copy on desktop
+  setTimeout(()=>{
+    const pre=el('sql-txt');
+    if(pre&&window.getSelection){
+      const sel=window.getSelection(),range=document.createRange();
+      range.selectNodeContents(pre);sel.removeAllRanges();sel.addRange(range);
+    }
+  },200);
+}
 function copySQL(){navigator.clipboard.writeText(SQL).then(()=>toast('SQL copiado'));}
 
 // DARK MODE
