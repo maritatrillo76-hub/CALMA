@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CALMA</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
 <style>
 :root{
   --c:#F7F2EB;--cd:#EDE5D8;--ch:#E5DDD0;
@@ -562,41 +563,61 @@ function monL(d){const dw=d.getDay()===0?7:d.getDay();return new Date(d.getFullY
 // ═══ SUPABASE ═══
 async function initSB(){
   try{
-    const {createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
-    SB=createClient(SB_URL,SB_KEY);
-    // test
-    const {error}=await SB.from('calma_clientes').select('count',{count:'exact',head:true});
-    if(error&&error.code!=='42P01')throw error;
-    el('dbd').style.background='var(--ok)';el('dbl').textContent='Supabase ✓';
-    if(el('cfg-db'))el('cfg-db').innerHTML='<span class="b bg-g">✓ Conectado</span>';
+    // Usar el objeto global cargado por el script UMD en <head>
+    if(typeof supabase === 'undefined'){
+      throw new Error('Librería Supabase no cargada. Verificá tu conexión a internet.');
+    }
+    SB = supabase.createClient(SB_URL, SB_KEY);
+    // Test de conexión real
+    const {data, error} = await SB.from('calma_clientes').select('id').limit(1);
+    if(error && error.code !== 'PGRST116' && error.code !== '42P01'){
+      throw error;
+    }
+    el('dbd').style.background='var(--ok)';
+    el('dbl').textContent='Supabase ✓';
+    if(el('cfg-db')) el('cfg-db').innerHTML='<span class="b bg-g">✓ Conectado</span>';
   }catch(e){
-    console.error('SB init:',e);
-    el('dbd').style.background='var(--er)';el('dbl').textContent='Sin conexión';
-    toast('Error al conectar con Supabase. Verificá las credenciales.',true);
+    console.error('SB init error:', e);
+    el('dbd').style.background='var(--er)';
+    el('dbl').textContent='Error conexión';
+    // Mostrar error detallado
+    const msg = e.message || JSON.stringify(e);
+    toast('⚠ Error Supabase: '+msg.slice(0,120), true);
+    if(el('cfg-db')) el('cfg-db').innerHTML=`<span class="b bg-r">Error: ${msg.slice(0,80)}</span>`;
   }
 }
 
 async function loadAll(){
   if(!SB)return;
-  try{
-    const [cl,ag,ti,co,si,cf]=await Promise.all([
-      SB.from('calma_clientes').select('*').order('apellido'),
-      SB.from('calma_agenda').select('*').order('fecha',{ascending:false}),
-      SB.from('calma_tipos').select('*').order('nombre'),
-      SB.from('calma_colegas').select('*').order('nombre'),
-      SB.from('calma_sinc').select('*').order('fecha',{ascending:false}),
-      SB.from('calma_config').select('*')
-    ]);
-    if(cl.data)DB.clientes=cl.data;
-    if(ag.data)DB.agenda=ag.data;
-    if(ti.data)DB.tipos=ti.data;
-    if(co.data)DB.colegas=co.data;
-    if(si.data)DB.sinc=si.data;
-    if(cf.data)cf.data.forEach(r=>{
-      try{if(r.key==='desc')DB.cfg.desc=JSON.parse(r.value);
-          if(r.key==='opts')DB.cfg.opts=JSON.parse(r.value);}catch(e){}
-    });
-  }catch(e){console.error('loadAll:',e);toast('Error cargando datos',true);}
+  // Cargar cada tabla por separado para mejor diagnóstico
+  async function safe(fn, name){
+    try{ return await fn(); }
+    catch(e){ console.warn('Error cargando '+name+':', e); return {data:null,error:e}; }
+  }
+  const [cl,ag,ti,co,si,cf] = await Promise.all([
+    safe(()=>SB.from('calma_clientes').select('*').order('apellido'),'clientes'),
+    safe(()=>SB.from('calma_agenda').select('*').order('fecha',{ascending:false}),'agenda'),
+    safe(()=>SB.from('calma_tipos').select('*').order('nombre'),'tipos'),
+    safe(()=>SB.from('calma_colegas').select('*').order('nombre'),'colegas'),
+    safe(()=>SB.from('calma_sinc').select('*').order('fecha',{ascending:false}),'sinc'),
+    safe(()=>SB.from('calma_config').select('*'),'config')
+  ]);
+  // Verificar si las tablas existen
+  if(cl.error && (cl.error.code==='42P01'||cl.error.message?.includes('does not exist'))){
+    toast('⚠ Las tablas no existen aún. Andá a Configuración → Ver SQL para crearlas.',true);
+    return;
+  }
+  if(cl.data)DB.clientes=cl.data;
+  if(ag.data)DB.agenda=ag.data;
+  if(ti.data)DB.tipos=ti.data;
+  if(co.data)DB.colegas=co.data;
+  if(si.data)DB.sinc=si.data;
+  if(cf.data)cf.data.forEach(r=>{
+    try{
+      if(r.key==='desc')DB.cfg.desc=JSON.parse(r.value);
+      if(r.key==='opts')DB.cfg.opts=JSON.parse(r.value);
+    }catch(e){}
+  });
 }
 
 // dbSave limpio — nunca manda campos vacíos como string si deben ser null
