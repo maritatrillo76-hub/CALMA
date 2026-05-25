@@ -528,8 +528,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 <div class="view" id="vw-bday">
   <div class="g2">
     <div>
-      <div class="card" style="margin-bottom:14px"><div class="ch"><span class="ct">🎂 Próximos 30 días</span></div><div id="bd-prox" style="padding:12px 16px;max-height:300px;overflow-y:auto"></div></div>
-      <div class="card"><div class="ch"><span class="ct" id="bd-mes-t">Este mes</span></div><div id="bd-mes" style="padding:12px 16px;max-height:240px;overflow-y:auto"></div></div>
+      <div class="card" style="margin-bottom:14px"><div class="ch"><span class="ct">🎂 Próximos 5 cumpleaños</span></div><div id="bd-prox" style="padding:12px 16px;max-height:300px;overflow-y:auto"></div></div>
+      <div class="card"><div class="ch"><span class="ct" id="bd-mes-t">Todos los clientes</span></div><div id="bd-mes" style="padding:12px 16px;max-height:240px;overflow-y:auto"></div></div>
     </div>
     <div class="card">
       <div class="ch"><span class="ct" id="bd-cal-t">Calendario</span><div style="display:flex;gap:6px"><button class="btn bg2 bsm" onclick="bdNav(-1)">← Ant</button><button class="btn bg2 bsm" onclick="bdNav(1)">Sig →</button></div></div>
@@ -1024,11 +1024,13 @@ function rDash(){
   // Cumpleaños dash
   const bds=getBdays().filter(b=>b.dif<=30).slice(0,4);
   el('d-bday').innerHTML=bds.length?bds.map(b=>{
-    const lbl=b.dif===0?'🎉 HOY':b.dif===1?'Mañana':'En '+b.dif+'d';
+    const isH=b.dif===0,isM=b.dif===1;
+    const lbl=isH?'🎉 HOY':isM?'Mañana':'En '+b.dif+'d';
     return`<div class="bd-it" onclick="oFi('${b.c.id}')">
-      <div style="font-size:20px">${b.dif===0?'🎂':'🎁'}</div>
-      <div style="flex:1;min-width:0"><div class="bd-n" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.c.nombre} ${b.c.apellido}</div><div style="font-size:11px;color:var(--dl)">${b.d.getDate()} ${MS[b.d.getMonth()]} · ${b.nextAge} años</div></div>
-      <div style="font-size:11px;font-weight:500;color:${b.dif===0?'var(--t)':b.dif<=7?'var(--wn)':'var(--dl)'};flex-shrink:0">${lbl}</div>
+      <div style="font-size:20px;flex-shrink:0">${isH?'🎂':'🎁'}</div>
+      <div style="flex:1;min-width:0"><div class="bd-n" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${b.c.nombre} ${b.c.apellido}</div>
+      <div style="font-size:10.5px;color:var(--dl)">${b.d.getDate()} ${MS[b.d.getMonth()]} · ${b.age} → ${b.nextAge} años</div></div>
+      <div style="font-size:11px;font-weight:500;color:${isH?'var(--t)':b.dif<=7?'var(--wn)':'var(--dl)'};flex-shrink:0;text-align:right">${lbl}</div>
     </div>`;
   }).join(''):'<div class="es" style="padding:16px"><p>Sin cumpleaños próximos</p></div>';
   // Chart
@@ -1055,7 +1057,7 @@ function rAlrts(){
   // Cumpleaños 7 días
   getBdays().filter(b=>b.dif<=7).forEach(b=>{
     const lbl=b.dif===0?'¡Hoy!':b.dif===1?'Mañana':'En '+b.dif+' días';
-    alrts.push({tipo:'al-b',ico:'🎂',txt:`<strong>${b.c.nombre} ${b.c.apellido}</strong> cumple ${b.nextAge} años · ${lbl}`,sub:`${b.d.getDate()} de ${MS[b.d.getMonth()]}`,cid:b.c.id});
+    alrts.push({tipo:'al-b',ico:'🎂',txt:`<strong>${b.c.nombre} ${b.c.apellido}</strong> cumple ${b.nextAge} años (hoy tiene ${b.age}) · ${lbl}`,sub:`${b.d.getDate()} de ${MS[b.d.getMonth()]}`,cid:b.c.id});
   });
   // Cobros pendientes >14 días
   DB.agenda.filter(a=>a.estado==='realizado'&&(a.pago==='pendiente'||a.pago==='parcial')).forEach(a=>{
@@ -1173,30 +1175,53 @@ function getBdays(){
     if(next<now)next=new Date(yr+1,d.getMonth(),d.getDate());
     const dif=Math.round((next-now)/86400000);
     const nextAge=next.getFullYear()-d.getFullYear();
-    return{c,d,next,dif,nextAge};
+    // Edad actual
+    const today=new Date();
+    let age=today.getFullYear()-d.getFullYear();
+    const m=today.getMonth()-d.getMonth();
+    if(m<0||(m===0&&today.getDate()<d.getDate()))age--;
+    return{c,d,next,dif,nextAge,age};
   }).filter(Boolean).sort((a,b)=>a.dif-b.dif);
 }
 function rBday(){
-  const bdays=getBdays(),now=new Date();
-  // Próximos 30
-  const prox=bdays.filter(b=>b.dif<=30).slice(0,15);
-  el('bd-prox').innerHTML=prox.length?prox.map(b=>{
-    const isH=b.dif===0,isM=b.dif===1,lbl=isH?'🎉 HOY':isM?'Mañana':'En '+b.dif+'d';
+  const bdays=getBdays();
+
+  // ── Próximos 5 (sin límite de días) ──
+  const prox=bdays.slice(0,5);
+  const proxEl=el('bd-prox');
+  proxEl.innerHTML=prox.length?prox.map(b=>{
+    const isH=b.dif===0,isM=b.dif===1;
+    const lbl=isH?'🎉 HOY':isM?'Mañana':'En '+b.dif+(b.dif===1?' día':' días');
+    const color=isH?'var(--t)':b.dif<=7?'var(--wn)':'var(--dl)';
     return`<div class="bd-it" onclick="oFi('${b.c.id}')">
-      <div style="font-size:22px">${isH?'🎂':'🎁'}</div>
-      <div style="flex:1;min-width:0"><div class="bd-n">${b.c.nombre} ${b.c.apellido}</div><div style="font-size:11px;color:var(--dl)">${b.d.getDate()} ${MS[b.d.getMonth()]} · cumple ${b.nextAge} años</div></div>
-      <div style="font-size:12px;font-weight:500;color:${isH?'var(--t)':b.dif<=7?'var(--wn)':'var(--dl)'};flex-shrink:0">${lbl}</div>
+      <div style="font-size:22px;flex-shrink:0">${isH?'🎂':'🎁'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="bd-n">${b.c.nombre} ${b.c.apellido}</div>
+        <div style="font-size:11px;color:var(--dl)">${b.d.getDate()} ${MS[b.d.getMonth()]} · Hoy tiene <strong>${b.age}</strong> años · Cumple <strong>${b.nextAge}</strong></div>
+      </div>
+      <div style="font-size:12px;font-weight:500;color:${color};flex-shrink:0;text-align:right">${lbl}</div>
     </div>`;
-  }).join(''):'<div class="es" style="padding:20px"><p>Sin cumpleaños en los próximos 30 días</p></div>';
-  // Este mes del calendario
+  }).join(''):'<div class="es" style="padding:20px"><p>No hay clientes con fecha de nacimiento cargada</p></div>';
+
+  // ── Listado completo ordenado por próximo cumpleaños ──
+  const mesEl=el('bd-mes');
+  el('bd-mes-t').textContent='Todos los clientes';
+  mesEl.innerHTML=bdays.length?bdays.map(b=>{
+    const isH=b.dif===0,isM=b.dif===1;
+    const lbl=isH?'🎉 HOY':isM?'Mañana':'en '+b.dif+(b.dif===1?' día':' días');
+    return`<div class="bd-it" onclick="oFi('${b.c.id}')">
+      <div style="min-width:38px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--t);line-height:1">${b.d.getDate()}</div>
+        <div style="font-size:9px;color:var(--dl);letter-spacing:.5px;text-transform:uppercase">${MS[b.d.getMonth()]}</div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="bd-n">${b.c.nombre} ${b.c.apellido}</div>
+        <div style="font-size:11px;color:var(--dl)">${b.age} años · cumple ${b.nextAge} ${lbl}${isH?' 🎂':''}</div>
+      </div>
+    </div>`;
+  }).join(''):'<div class="es" style="padding:16px"><p>Sin clientes con fecha de nacimiento</p></div>';
+
   rBdCal();
-  // Mes lista
-  const mesB=bdays.filter(b=>{const bm=b.next.getMonth(),by=b.next.getFullYear();return bm===bdM.m&&by===bdM.y;});
-  el('bd-mes-t').textContent=ML[bdM.m]+' '+bdM.y;
-  el('bd-mes').innerHTML=mesB.length?mesB.map(b=>{
-    const isH=b.dif===0;
-    return`<div class="bd-it" onclick="oFi('${b.c.id}')"><div style="min-width:32px;text-align:center;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--t)">${b.d.getDate()}</div><div style="flex:1"><div class="bd-n">${b.c.nombre} ${b.c.apellido}</div><div style="font-size:11px;color:var(--dl)">${b.nextAge} años${isH?' · 🎉 HOY':''}</div></div></div>`;
-  }).join(''):'<div class="es" style="padding:16px"><p>Sin cumpleaños este mes</p></div>';
 }
 function rBdCal(){
   if(!bdM)return;
@@ -1224,7 +1249,7 @@ function setSF(v,e){SF=v;document.querySelectorAll('#vw-sinc .ftab.si').forEach(
 function rSinc(){rCols();rSincL();}
 function rCols(){
   const e=el('col-list');
-  e.innerHTML=DB.colegas.length?DB.colegas.map(c=>`<div class="col-c" onclick="oCol('${c.id}')"><div class="col-av">${(c.nombre||'?')[0]}${(c.apellido||'?')[0]}</div><div style="flex:1"><div style="font-weight:500;font-size:13px">${c.nombre} ${c.apellido||''}</div><div style="font-size:11px;color:var(--dl)">${c.especialidad||''}</div>${c.tel?`<div style="font-size:11px;color:var(--dl)">${c.tel}</div>`:''}</div><span class="b bg-si">Colega</span></div>`).join('')
+  e.innerHTML=DB.colegas.length?DB.colegas.map(c=>`<div class="col-c"><div class="col-av" onclick="oCol('${c.id}')">${(c.nombre||'?')[0]}${(c.apellido||'?')[0]}</div><div style="flex:1;cursor:pointer" onclick="oCol('${c.id}')" ><div style="font-weight:500;font-size:13px">${c.nombre} ${c.apellido||''}</div><div style="font-size:11px;color:var(--dl)">${c.especialidad||''}</div>${c.tel?`<div style="font-size:11px;color:var(--dl)">${c.tel}</div>`:''}</div><div style="display:flex;align-items:center;gap:6px"><span class="b bg-si">Colega</span><button class="bic ber" onclick="dCol('${c.id}')" title="Eliminar"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button></div></div>`).join('')
   :'<div class="es" style="padding:18px"><p>Sin colegas cargadas</p></div>';
 }
 function rSincL(){
@@ -1302,7 +1327,11 @@ function oFi(id){
   const inf=(l,v)=>ok(v)?`<div class="ii"><label>${l}</label><div class="v">${v}</div></div>`:'';
   el('fi-b').innerHTML=`
     <div class="fih"><div class="fih-av">${(c.nombre||'?')[0]}${(c.apellido||'?')[0]}</div>
-      <div class="fih-i"><h2>${c.nombre} ${c.apellido}</h2><p>${ok(c.profesion)?c.profesion:''}${ok(c.telefono)?' · '+c.telefono:''}</p></div>
+      <div class="fih-i">
+        <h2>${c.nombre} ${c.apellido}</h2>
+        <p>${ok(c.profesion)?c.profesion:''}${ok(c.telefono)?' · '+c.telefono:''}</p>
+        ${ok(c.fnac)?(()=>{const d=pd(c.fnac);if(!d)return'';const now=new Date();let age=now.getFullYear()-d.getFullYear();const mo=now.getMonth()-d.getMonth();if(mo<0||(mo===0&&now.getDate()<d.getDate()))age--;return`<p style="font-size:11px;color:#C8BFB5;margin-top:2px">${age} años · ${d.getDate()} ${MS[d.getMonth()]} ${d.getFullYear()}</p>`;})():''}
+      </div>
       <div class="fih-s"><div><div class="fih-sv">${ses.length}</div><div class="fih-sl">Sesiones</div></div><div><div class="fih-sv">$${cob.toLocaleString('es-AR')}</div><div class="fih-sl">Cobrado</div></div><div><div class="fih-sv" style="color:${pend?'var(--er)':'inherit'}">$${pend.toLocaleString('es-AR')}</div><div class="fih-sl">Pendiente</div></div></div>
     </div>
     <div class="tabs"><div class="tab on" onclick="sT(this,'ft-s')">Sesiones</div><div class="tab" onclick="sT(this,'ft-d')">Datos</div><div class="tab" onclick="sT(this,'ft-h')">Hábitos</div><div class="tab" onclick="sT(this,'ft-f')">Físico & Emocional</div><div class="tab" onclick="sT(this,'ft-ay')">Prakriti & Vikriti</div></div>
@@ -1427,6 +1456,7 @@ async function dTipo(id){if(!confirm('¿Eliminar tipo?'))return;await dbDel('cal
 // COLEGAS
 function oCol(id){['col-id','col-n','col-a','col-t','col-e','col-es','col-no'].forEach(f=>sv(f,''));if(id){const c=DB.colegas.find(x=>x.id===id);if(c){sv('col-id',c.id);sv('col-n',c.nombre);sv('col-a',c.apellido||'');sv('col-t',c.tel||'');sv('col-e',c.email||'');sv('col-es',c.especialidad||'');sv('col-no',c.notas||'');}}oMo('mo-col');}
 async function saveCol(){const n=gv('col-n').trim();if(!n){toast('Nombre requerido',true);return;}const id=gv('col-id');const raw={nombre:n,apellido:gv('col-a')||null,tel:gv('col-t')||null,email:gv('col-e')||null,especialidad:gv('col-es')||null,notas:gv('col-no')||null};if(id)raw.id=id;cMo('mo-col');toast('Guardando...');const res=await dbSave('calma_colegas',raw);if(res.ok){await rar();toast('✓ Colega guardada');}}
+async function dCol(id){if(!confirm('¿Eliminar esta colega?'))return;await dbDel('calma_colegas',id);await rar();toast('Colega eliminada');}
 
 // SINC
 function oSS(id){['ss-id','ss-no','ss-pm','ss-rm'].forEach(f=>sv(f,''));sv('ss-fe',hoy());sv('ss-ho','');sv('ss-pr','');sv('ss-pc','50');sv('ss-dv','0 / 0');sv('ss-py','pendiente');sv('ss-pc2','pendiente');el('ss-pb').style.display='none';
